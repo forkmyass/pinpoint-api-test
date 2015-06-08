@@ -1,4 +1,4 @@
-var apiUrl = "https://pinpointapi.geowavestaging.com/api";
+var apiUrl = "http://pinpointapi.geowavestaging.com/api";
 
 var urls = {
     LOGIN: "/login"
