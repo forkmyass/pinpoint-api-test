@@ -15,9 +15,8 @@ describe("POST: /login", function() {
             .post(url("LOGIN"))
             .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
             .end(function(err, res){
-                console.log(expect);
-                expect(res.status).to.be.a(Number);
                 done();
+                expect(res.status).to.be.a(Number);
             });
     });
     // it("should return json with \"error.message\" key  ({error: {message: 'invalid password'}}) for invalid login credentials", function(done) {
