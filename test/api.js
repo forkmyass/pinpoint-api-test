@@ -15,11 +15,8 @@ describe("POST: /login", function() {
             .post(url("LOGIN"))
             .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
             .end(function(err, res){
-                console.log(res);
-                console.log(res.body);
-                console.log(err);
-                // if (err) return done(err);
-                // expect(res.statusCode).to.eql(400);
+                if (err) return done(err);
+                expect(res.status).to.eql(400);
                 done();
             });
     });
