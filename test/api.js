@@ -15,7 +15,7 @@ describe("POST: /login", function() {
             .post(url("LOGIN"))
             .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
             .end(function(err, res){
-                console.log(res.statusCode);
+                console.log(res);
                 console.log(res.body);
                 console.log(err);
                 // if (err) return done(err);
