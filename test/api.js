@@ -9,6 +9,7 @@ var url = function(path) {
 }
 
 describe("POST: /login", function() {
+    this.timeout(10000);
     it("should return BadRequest:400 for invalid login credentials", function(done) {
         superagent
             .post(url("LOGIN"))
