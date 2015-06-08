@@ -10,23 +10,23 @@ var url = function(path) {
 
 describe("POST: /login", function() {
     it("should return BadRequest:400 for invalid login credentials", function(done) {
-        done()
-        // superagent
-        //     .post(url("LOGIN"))
-        //     .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
-        //     .end(function(err, res){
-        //         expect(res.statusCode).to.eql(400);
-        //         done();
-        //     });
+        superagent
+            .post(url("LOGIN"))
+            .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
+            .end(function(err, res){
+                if (err) return done(err);
+                expect(res.statusCode).to.eql(400);
+                done();
+            });
     });
     it("should return json with \"error.message\" key  ({error: {message: 'invalid password'}}) for invalid login credentials", function(done) {
-        done()
-        // superagent
-        //     .post(url("LOGIN"))
-        //     .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
-        //     .end(function(err, res){
-        //         expect(res.body).to.have.property("error");
-        //         done();
-        //     });
+        superagent
+            .post(url("LOGIN"))
+            .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
+            .end(function(err, res){
+                if (err) return done(err);
+                expect(res.body).to.have.property("error");
+                done();
+            });
     });
 });
