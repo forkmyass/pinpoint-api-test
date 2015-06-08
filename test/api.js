@@ -15,6 +15,7 @@ describe("POST: /login", function() {
             .post(url("LOGIN"))
             .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
             .end(function(err, res){
+                console.log(expect);
                 expect(res.status).to.be.a(Number);
                 done();
             });
