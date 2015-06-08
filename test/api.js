@@ -15,18 +15,28 @@ describe("POST: /login", function() {
             .post(url("LOGIN"))
             .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
             .end(function(err, res){
+                if (err) return done(err);
+                try {
+                    expect(res.status).to.eql(400);
+                } catch (e) {
+                    done(e);
+                }
                 done();
-                expect(res.status).to.be.a(Number);
             });
     });
-    // it("should return json with \"error.message\" key  ({error: {message: 'invalid password'}}) for invalid login credentials", function(done) {
-    //     superagent
-    //         .post(url("LOGIN"))
-    //         .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
-    //         .end(function(err, res){
-    //             if (err) return done(err);
-    //             expect(res.body).to.have.property("error");
-    //             done();
-    //         });
-    // });
+    it("should return json with \"Error.Message\" key  ({Error: {Message: 'invalid password'}}) for invalid login credentials", function(done) {
+        superagent
+            .post(url("LOGIN"))
+            .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
+            .end(function(err, res){
+                if (err) return done(err);
+                try {
+                    expect(res.body).to.have.property("Error");
+                    expect(res.body.Error).to.have.property("Message");
+                } catch (e) {
+                    done(e);
+                }
+                done();
+            });
+    });
 });
