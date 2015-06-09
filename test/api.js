@@ -24,7 +24,7 @@ describe("POST: /login", function() {
                 done();
             });
     });
-    it("should return json with \"Error.Message\" key  ({Error: {Message: 'invalid password'}}) for invalid login credentials", function(done) {
+    it("should return json with \"Error.Message\" keys {Error: {Message: 'invalid password'}} for invalid login credentials", function(done) {
         superagent
             .post(url("LOGIN"))
             .send({ EmailAddress: 'wrongName', Password: 'wrongPass' })
@@ -33,6 +33,31 @@ describe("POST: /login", function() {
                 try {
                     expect(res.body).to.have.property("Error");
                     expect(res.body.Error).to.have.property("Message");
+                } catch (e) {
+                    done(e);
+                }
+                done();
+            });
+    });
+    it("should return User and Company info after success login", function(done) {
+        superagent
+            .post(url("LOGIN"))
+            .send({ EmailAddress: 'admin', Password: 'password' })
+            .end(function(err, res){
+                if (err) return done(err);
+                try {
+                    expect(res.body).to.have.property("Company");
+                    expect(res.body).to.have.property("User");
+                    expect(res.body.Company).to.be.an(Array);
+                    expect(res.body.Company[0]).to.have.property("CompanyName", "trinity mirror");
+                    expect(res.body.Company[0]).to.have.property("IsActive", true);
+                    expect(res.body.Company[0]).to.have.property("IsBlocked", false);
+                    expect(res.body.Company[0]).to.have.property("PersonCompanyID", 1);
+
+                    expect(res.body.User).to.have.property("AuthToken");
+                    expect(res.body.User.AuthToken).to.be.ok();
+                    expect(res.body.User).to.have.property("IsAdmin", true);
+                    expect(res.body.User).to.have.property("UserID", 1);
                 } catch (e) {
                     done(e);
                 }
