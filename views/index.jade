@@ -9,9 +9,10 @@ html
     script(src='https://cdnjs.cloudflare.com/ajax/libs/expect.js/0.2.0/expect.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/mocha/2.2.5/mocha.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bluebird/2.9.27/bluebird.min.js')
     script.
       mocha.setup('bdd')
-    script(src='./test/api.js')
+    script(src='./dist/test/api.js')
     script.
       mocha.checkLeaks();
       mocha.globals(['jQuery']);
