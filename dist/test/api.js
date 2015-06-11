@@ -4020,9 +4020,13 @@ var login = function login(EmailAddress, Password) {
     return regeneratorRuntime.async(function login$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
-                return context$1$0.abrupt("return", post((0, _urls.url)("LOGIN"), { EmailAddress: EmailAddress, Password: Password }));
+                context$1$0.next = 2;
+                return regeneratorRuntime.awrap(post((0, _urls.url)("LOGIN"), { EmailAddress: EmailAddress, Password: Password }));
 
-            case 1:
+            case 2:
+                return context$1$0.abrupt("return", context$1$0.sent);
+
+            case 3:
             case "end":
                 return context$1$0.stop();
         }

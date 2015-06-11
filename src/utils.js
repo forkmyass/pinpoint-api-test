@@ -28,7 +28,7 @@ var post = async (url, data, headers) => {
 }
 
 var login = async (EmailAddress, Password) => {
-    return post(url("LOGIN"), {EmailAddress, Password});
+    return await post(url("LOGIN"), {EmailAddress, Password});
 }
 
 var createAdwertiser = async (data) => {
