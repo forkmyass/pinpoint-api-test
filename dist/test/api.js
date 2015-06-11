@@ -3591,114 +3591,166 @@ module.exports = require('./modules/$').core;
 );
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":95}],92:[function(require,module,exports){
+},{"_process":98}],92:[function(require,module,exports){
 module.exports = require("./lib/babel/polyfill");
 
 },{"./lib/babel/polyfill":1}],93:[function(require,module,exports){
 module.exports = require("babel-core/polyfill");
 
 },{"babel-core/polyfill":92}],94:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+var NotFound = (function (_Error) {
+    function NotFound(path) {
+        _classCallCheck(this, NotFound);
+
+        _get(Object.getPrototypeOf(NotFound.prototype), 'constructor', this).call(this, path);
+        this.code = 404;
+        this.path = path;
+        Error.captureStackTrace(this);
+    }
+
+    _inherits(NotFound, _Error);
+
+    return NotFound;
+})(Error);
+
+var Forbidden = (function (_Error2) {
+    function Forbidden(path) {
+        _classCallCheck(this, Forbidden);
+
+        _get(Object.getPrototypeOf(Forbidden.prototype), 'constructor', this).call(this, path);
+        this.code = 403;
+        this.path = path;
+        Error.captureStackTrace(this);
+    }
+
+    _inherits(Forbidden, _Error2);
+
+    return Forbidden;
+})(Error);
+
+var Unauthorized = (function (_Error3) {
+    function Unauthorized(msg) {
+        _classCallCheck(this, Unauthorized);
+
+        _get(Object.getPrototypeOf(Unauthorized.prototype), 'constructor', this).call(this, msg);
+        this.message = msg || 'Unauthorized';
+        this.code = 401;
+        Error.captureStackTrace(this);
+    }
+
+    _inherits(Unauthorized, _Error3);
+
+    return Unauthorized;
+})(Error);
+
+var BadRequest = (function (_Error4) {
+    function BadRequest(body) {
+        _classCallCheck(this, BadRequest);
+
+        _get(Object.getPrototypeOf(BadRequest.prototype), 'constructor', this).call(this, body);
+        this.message = 'Bad request';
+        this.body = body;
+        this.code = 400;
+        Error.captureStackTrace(this);
+    }
+
+    _inherits(BadRequest, _Error4);
+
+    return BadRequest;
+})(Error);
+
+exports['default'] = { NotFound: NotFound, Forbidden: Forbidden, Unauthorized: Unauthorized, BadRequest: BadRequest };
+module.exports = exports['default'];
+
+},{}],95:[function(require,module,exports){
 "use strict";
 
 var _this = this;
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _errors = require("../errors");
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _utils = require("../utils");
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+var _urls = require("../urls");
 
 require("babelify/polyfill");
-var apiUrl = "http://pinpointapi.geowavestaging.com/api";
-
-var urls = {
-    LOGIN: "/login",
-    CREATE_ADWERTISER: "/admin/createadvertiser"
-};
-
-var url = function url(path) {
-    return apiUrl + urls[path];
-};
-
-var request = function request(options) {
-    options.headers = options.headers || {};
-    return new Promise(function (resolve, reject) {
-        superagent[options.method](options.url).set(options.headers).send(options.data).end(function (err, res) {
-            if (err) {
-                return reject(err);
-            }
-            if (res.status === 400) {
-                return reject(new BadRequest(res.body));
-            }
-
-            resolve(res.body);
-        });
-    });
-};
-
-var post = function post(url, data, headers) {
-    var options = { url: url, data: data, headers: headers };
-    options.method = "post";
-    return request(options);
-};
-
-var login = function login(callback) {
-    return post(url("LOGIN"), { EmailAddress: "admin", Password: "password" });
-};
-
-var createAdwertiser = function createAdwertiser(AuthToken) {
-    var loginData;
-    return regeneratorRuntime.async(function createAdwertiser$(context$1$0) {
-        while (1) switch (context$1$0.prev = context$1$0.next) {
-            case 0:
-                context$1$0.next = 2;
-                return regeneratorRuntime.awrap(login());
-
-            case 2:
-                loginData = context$1$0.sent;
-                return context$1$0.abrupt("return", post(url("CREATE_ADWERTISER"), {}, { "Authorization-Token": loginData.User.AuthToken }));
-
-            case 4:
-            case "end":
-                return context$1$0.stop();
-        }
-    }, null, _this);
-};
 
 describe("POST: /login", function () {
-    it("should return BadRequest:400 for invalid login credentials", function (done) {
-        superagent.post(url("LOGIN")).send({ EmailAddress: "wrongName", Password: "wrongPass" }).end(function (err, res) {
-            if (err) return done(err);
-            try {
-                expect(res.status).to.eql(400);
-            } catch (e) {
-                done(e);
+    it("should return BadRequest:400 for invalid login credentials", function callee$1$0(done) {
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    context$2$0.next = 3;
+                    return regeneratorRuntime.awrap((0, _utils.login)("wrongEmail", "wrongPass"));
+
+                case 3:
+                    done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
+                    context$2$0.next = 10;
+                    break;
+
+                case 6:
+                    context$2$0.prev = 6;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    expect(context$2$0.t0).to.be.a(_errors.BadRequest);
+                    done();
+
+                case 10:
+                case "end":
+                    return context$2$0.stop();
             }
-            done();
-        });
+        }, null, _this, [[0, 6]]);
     });
 
-    it("should return json with \"Error.Message\" keys {Error: {Message: 'invalid password'}} for invalid login credentials", function (done) {
-        superagent.post(url("LOGIN")).send({ EmailAddress: "wrongName", Password: "wrongPass" }).end(function (err, res) {
-            if (err) return done(err);
-            try {
-                expect(res.body).to.have.property("Error");
-                expect(res.body.Error).to.have.property("Message");
-            } catch (e) {
-                done(e);
+    it("should return json with \"Error.Message\" keys {Error: {Message: 'invalid password'}} for invalid login credentials", function callee$1$0(done) {
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    context$2$0.next = 3;
+                    return regeneratorRuntime.awrap((0, _utils.login)("wrongEmail", "wrongPass"));
+
+                case 3:
+                    done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
+                    context$2$0.next = 11;
+                    break;
+
+                case 6:
+                    context$2$0.prev = 6;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    expect(context$2$0.t0.body).to.have.property("Error");
+                    expect(context$2$0.t0.body.Error).to.have.property("Message");
+                    done();
+
+                case 11:
+                case "end":
+                    return context$2$0.stop();
             }
-            done();
-        });
+        }, null, _this, [[0, 6]]);
     });
 
-    it("should return User and Company info after success login", function callee$1$0(done) {
+    it("should return User and Company info after success adwertiser login", function callee$1$0(done) {
         var data;
         return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
             while (1) switch (context$2$0.prev = context$2$0.next) {
                 case 0:
                     context$2$0.prev = 0;
                     context$2$0.next = 3;
-                    return regeneratorRuntime.awrap(login());
+                    return regeneratorRuntime.awrap((0, _utils.login)("multiplelogin", "password"));
 
                 case 3:
                     data = context$2$0.sent;
@@ -3706,9 +3758,50 @@ describe("POST: /login", function () {
                     expect(data).to.have.property("Company");
                     expect(data).to.have.property("User");
                     expect(data.Company).to.be.an(Array);
-                    expect(data.Company[0]).to.have.property("CompanyName", "trinity mirror");
-                    expect(data.Company[0]).to.have.property("IsActive", true);
-                    expect(data.Company[0]).to.have.property("IsBlocked", false);
+                    expect(data.Company[0]).to.have.property("CompanyName");
+                    expect(data.Company[0]).to.have.property("IsActive");
+                    expect(data.Company[0]).to.have.property("IsBlocked");
+                    expect(data.Company[0]).to.have.property("PersonCompanyID", 5);
+
+                    expect(data.User).to.have.property("AuthToken");
+                    expect(data.User.AuthToken).to.be.ok();
+                    expect(data.User).to.have.property("IsAdmin", false);
+                    expect(data.User).to.have.property("UserID", 5);
+                    done();
+                    context$2$0.next = 21;
+                    break;
+
+                case 18:
+                    context$2$0.prev = 18;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    done(context$2$0.t0);
+
+                case 21:
+                case "end":
+                    return context$2$0.stop();
+            }
+        }, null, _this, [[0, 18]]);
+    });
+
+    it("should return User and Company info after success admin login", function callee$1$0(done) {
+        var data;
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    context$2$0.next = 3;
+                    return regeneratorRuntime.awrap((0, _utils.login)("admin", "password"));
+
+                case 3:
+                    data = context$2$0.sent;
+
+                    expect(data).to.have.property("Company");
+                    expect(data).to.have.property("User");
+                    expect(data.Company).to.be.an(Array);
+                    expect(data.Company[0]).to.have.property("CompanyName");
+                    expect(data.Company[0]).to.have.property("IsActive");
+                    expect(data.Company[0]).to.have.property("IsBlocked");
                     expect(data.Company[0]).to.have.property("PersonCompanyID", 1);
 
                     expect(data.User).to.have.property("AuthToken");
@@ -3741,25 +3834,28 @@ describe("POST: /api/admin/createadwertiser", function () {
                 case 0:
                     context$2$0.prev = 0;
                     context$2$0.next = 3;
-                    return regeneratorRuntime.awrap(createAdwertiser());
+                    return regeneratorRuntime.awrap((0, _utils.createAdwertiser)());
 
                 case 3:
                     adwertiser = context$2$0.sent;
-                    context$2$0.next = 9;
+
+                    done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
+                    context$2$0.next = 10;
                     break;
 
-                case 6:
-                    context$2$0.prev = 6;
+                case 7:
+                    context$2$0.prev = 7;
                     context$2$0.t0 = context$2$0["catch"](0);
 
-                    expect(context$2$0.t0).to.be.a(BadRequest);
+                    expect(context$2$0.t0).to.be.a(_errors.BadRequest);
 
-                case 9:
+                case 10:
                 case "end":
                     return context$2$0.stop();
             }
-        }, null, _this, [[0, 6]]);
+        }, null, _this, [[0, 7]]);
     });
+
     it("should return json with \"Error.Message\" keys {Error: {Message: \"firstName is too short\"}} for invalid adwertiser data", function callee$1$0() {
         var adwertiser;
         return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
@@ -3767,102 +3863,199 @@ describe("POST: /api/admin/createadwertiser", function () {
                 case 0:
                     context$2$0.prev = 0;
                     context$2$0.next = 3;
-                    return regeneratorRuntime.awrap(createAdwertiser());
+                    return regeneratorRuntime.awrap((0, _utils.createAdwertiser)({}));
 
                 case 3:
                     adwertiser = context$2$0.sent;
-                    context$2$0.next = 10;
+
+                    done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
+                    context$2$0.next = 11;
                     break;
 
-                case 6:
-                    context$2$0.prev = 6;
+                case 7:
+                    context$2$0.prev = 7;
                     context$2$0.t0 = context$2$0["catch"](0);
 
                     expect(context$2$0.t0.body).to.have.property("Error");
                     expect(context$2$0.t0.body.Error).to.have.property("Message");
 
-                case 10:
+                case 11:
                 case "end":
                     return context$2$0.stop();
             }
-        }, null, _this, [[0, 6]]);
+        }, null, _this, [[0, 7]]);
+    });
+
+    it("should return adwertiser info after creation adwertiser by admin", function callee$1$0(done) {
+        var adwertiser;
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    context$2$0.next = 3;
+                    return regeneratorRuntime.awrap((0, _utils.createAdwertiser)({
+                        "Name": "SergeyVayser",
+                        "Contact": "test",
+                        "Email": "wice242@gmail.com",
+                        "Password": "qQ190301",
+                        "Address": "holoseevskoe ave",
+                        "City": "Kiev",
+                        "Postcode": "NE11JF",
+                        "Sales": "test",
+                        "Billing": "test",
+                        "Payment": "test",
+                        "Package": "test"
+                    }));
+
+                case 3:
+                    adwertiser = context$2$0.sent;
+
+                    expect(adwertiser).to.be.ok();
+                    expect(adwertiser).to.have.property("Package");
+                    expect(adwertiser).to.have.property("Payment");
+
+                    done();
+
+                    context$2$0.next = 13;
+                    break;
+
+                case 10:
+                    context$2$0.prev = 10;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    done(context$2$0.t0);
+
+                case 13:
+                case "end":
+                    return context$2$0.stop();
+            }
+        }, null, _this, [[0, 10]]);
     });
 });
 
-var NotFound = (function (_Error) {
-    function NotFound(path) {
-        _classCallCheck(this, NotFound);
+},{"../errors":94,"../urls":96,"../utils":97,"babelify/polyfill":93}],96:[function(require,module,exports){
+"use strict";
 
-        _get(Object.getPrototypeOf(NotFound.prototype), "constructor", this).call(this, path);
-        this.code = 404;
-        this.path = path;
-        Error.captureStackTrace(this);
-    }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var apiUrl = "http://pinpointapi.geowavestaging.com/api";
 
-    _inherits(NotFound, _Error);
+var urls = {
+    LOGIN: "/login",
+    CREATE_ADWERTISER: "/admin/createadvertiser"
+};
 
-    return NotFound;
-})(Error);
+var url = function url(path) {
+    return apiUrl + urls[path];
+};
 
-var Forbidden = (function (_Error2) {
-    function Forbidden(path) {
-        _classCallCheck(this, Forbidden);
+exports["default"] = { url: url, apiUrl: apiUrl };
+module.exports = exports["default"];
 
-        _get(Object.getPrototypeOf(Forbidden.prototype), "constructor", this).call(this, path);
-        this.code = 403;
-        this.path = path;
-        Error.captureStackTrace(this);
-    }
+},{}],97:[function(require,module,exports){
+"use strict";
 
-    _inherits(Forbidden, _Error2);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-    return Forbidden;
-})(Error);
+var _this = this;
 
-var Unauthorized = (function (_Error3) {
-    function Unauthorized(msg) {
-        _classCallCheck(this, Unauthorized);
+var _urls = require("./urls");
 
-        _get(Object.getPrototypeOf(Unauthorized.prototype), "constructor", this).call(this, msg);
-        this.message = msg || "Unauthorized";
-        this.code = 401;
-        Error.captureStackTrace(this);
-    }
+var _errors = require("./errors");
 
-    _inherits(Unauthorized, _Error3);
+var request = function request(options) {
+    return regeneratorRuntime.async(function request$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                options.headers = options.headers || {};
+                return context$1$0.abrupt("return", new Promise(function (resolve, reject) {
+                    superagent[options.method](options.url).set(options.headers).send(options.data).end(function (err, res) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        if (res.status === 400) {
+                            return reject(new _errors.BadRequest(res.body));
+                        }
 
-    return Unauthorized;
-})(Error);
+                        if (res.status === 500) {
+                            return reject(new Error(res.body));
+                        }
 
-var BadRequest = (function (_Error4) {
-    function BadRequest(body) {
-        _classCallCheck(this, BadRequest);
+                        resolve(res.body);
+                    });
+                }));
 
-        _get(Object.getPrototypeOf(BadRequest.prototype), "constructor", this).call(this, body);
-        this.message = "Bad request";
-        this.body = body;
-        this.code = 400;
-        Error.captureStackTrace(this);
-    }
+            case 2:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, _this);
+};
 
-    _inherits(BadRequest, _Error4);
+var post = function post(url, data, headers) {
+    var options;
+    return regeneratorRuntime.async(function post$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                options = { url: url, data: data, headers: headers };
 
-    return BadRequest;
-})(Error);
+                options.method = "post";
+                context$1$0.next = 4;
+                return regeneratorRuntime.awrap(request(options));
 
-// "Name": "",
-// "Contact": "",
-// "Email": "",
-// "Password": "",
-// "Address": "",
-// "City": "",
-// "Postcode": "",
-// "Sales": "",
-// "Billing": "",
-// "Payment": "",
-// "Package": ""
+            case 4:
+                return context$1$0.abrupt("return", context$1$0.sent);
 
-},{"babelify/polyfill":93}],95:[function(require,module,exports){
+            case 5:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, _this);
+};
+
+var login = function login(EmailAddress, Password) {
+    return regeneratorRuntime.async(function login$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                return context$1$0.abrupt("return", post((0, _urls.url)("LOGIN"), { EmailAddress: EmailAddress, Password: Password }));
+
+            case 1:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, _this);
+};
+
+var createAdwertiser = function createAdwertiser(data) {
+    var loginData;
+    return regeneratorRuntime.async(function createAdwertiser$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                context$1$0.next = 2;
+                return regeneratorRuntime.awrap(login("admin", "password"));
+
+            case 2:
+                loginData = context$1$0.sent;
+                context$1$0.next = 5;
+                return regeneratorRuntime.awrap(post((0, _urls.url)("CREATE_ADWERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
+
+            case 5:
+                return context$1$0.abrupt("return", context$1$0.sent);
+
+            case 6:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, _this);
+};
+
+exports["default"] = { request: request, post: post, login: login, createAdwertiser: createAdwertiser };
+module.exports = exports["default"];
+
+},{"./errors":94,"./urls":96}],98:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3954,4 +4147,4 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[94]);
+},{}]},{},[95]);
