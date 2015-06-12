@@ -1,6 +1,6 @@
 require("babelify/polyfill");
-import {BadRequest} from "../errors";
-import {request, post, login, createAdwertiser} from "../utils";
+import {BadRequest, ServerError, Unauthorized} from "../errors";
+import {request, post, login, createAdwertiser, editAdwertiser, data} from "../utils";
 import {url, apiUrl} from "../urls";
 
 describe("POST: /login", () => {
@@ -70,6 +70,28 @@ describe("POST: /login", () => {
     });
 });
 
+describe("POST: /api/admin/getadwertiserlist", () => {
+    it("should return Unauthorized:401 for Unauthorized admin", async (done) => {
+        try {
+            let adwertisers = await post(url("ADWERTISER_LIST"));
+            done(new Error("Unauthorized:401 was expected"));
+        } catch (e) {
+            expect(e).to.be.a(Unauthorized);
+            done();
+        }
+    });
+
+    it("should return OK:200 with adwertisers list", async (done) => {
+        try {
+            let token = login("admin", "password", true);
+            let adwertisers = await post(url("ADWERTISER_LIST"), {}, {"Authorization-Token": token});
+            expect(adwertisers).to.be.ok();
+        } catch (e) {
+            done(e);
+        }
+    });
+});
+
 describe("POST: /api/admin/createadwertiser", () => {
     it("should return BadRequest:400 for invalid adwertiser data", async () => {
         try {
@@ -111,10 +133,30 @@ describe("POST: /api/admin/createadwertiser", () => {
             expect(adwertiser).to.have.property("Payment");
 
             done();
-
         } catch (e) {
             done(e);
         }
     });
-});
 
+    it.skip("should edit adwertiser info  by admin", async (done) => {
+        try {
+            let token = login("admin", "password", true);
+            let adwertiserList = await post(url("ADWERTISER_LIST"), {}, {"Authorization-Token": token});
+            // let adwertiser = await createAdwertiser(data.adwertiser);
+            // let editedAdwertiser = await editAdwertiser(adwertiser.id, {
+            //     Name: "edited",
+            //     Contact: "edited",
+            //     Email: data.adwertiser.Email
+            // });
+
+            // console.log(editedAdwertiser);
+
+            // expect(adwertiser).to.be.ok();
+            // expect(adwertiser).to.have.property("Name", "edited");
+            done();
+        } catch (e) {
+            console.log(e);
+            done(e);
+        }
+    });
+});

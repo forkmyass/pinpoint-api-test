@@ -3671,7 +3671,22 @@ var BadRequest = (function (_Error4) {
     return BadRequest;
 })(Error);
 
-exports['default'] = { NotFound: NotFound, Forbidden: Forbidden, Unauthorized: Unauthorized, BadRequest: BadRequest };
+var ServerError = (function (_Error5) {
+    function ServerError(body) {
+        _classCallCheck(this, ServerError);
+
+        _get(Object.getPrototypeOf(ServerError.prototype), 'constructor', this).call(this, body);
+        this.code = 500;
+        this.body = body;
+        Error.captureStackTrace(this);
+    }
+
+    _inherits(ServerError, _Error5);
+
+    return ServerError;
+})(Error);
+
+exports['default'] = { NotFound: NotFound, Forbidden: Forbidden, Unauthorized: Unauthorized, BadRequest: BadRequest, ServerError: ServerError };
 module.exports = exports['default'];
 
 },{}],95:[function(require,module,exports){
@@ -3744,7 +3759,8 @@ describe("POST: /login", function () {
     });
 
     it("should return User and Company info after success adwertiser login", function callee$1$0(done) {
-        var data;
+        var _data;
+
         return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
             while (1) switch (context$2$0.prev = context$2$0.next) {
                 case 0:
@@ -3753,20 +3769,20 @@ describe("POST: /login", function () {
                     return regeneratorRuntime.awrap((0, _utils.login)("multiplelogin", "password"));
 
                 case 3:
-                    data = context$2$0.sent;
+                    _data = context$2$0.sent;
 
-                    expect(data).to.have.property("Company");
-                    expect(data).to.have.property("User");
-                    expect(data.Company).to.be.an(Array);
-                    expect(data.Company[0]).to.have.property("CompanyName");
-                    expect(data.Company[0]).to.have.property("IsActive");
-                    expect(data.Company[0]).to.have.property("IsBlocked");
-                    expect(data.Company[0]).to.have.property("PersonCompanyID", 5);
+                    expect(_data).to.have.property("Company");
+                    expect(_data).to.have.property("User");
+                    expect(_data.Company).to.be.an(Array);
+                    expect(_data.Company[0]).to.have.property("CompanyName");
+                    expect(_data.Company[0]).to.have.property("IsActive");
+                    expect(_data.Company[0]).to.have.property("IsBlocked");
+                    expect(_data.Company[0]).to.have.property("PersonCompanyID", 5);
 
-                    expect(data.User).to.have.property("AuthToken");
-                    expect(data.User.AuthToken).to.be.ok();
-                    expect(data.User).to.have.property("IsAdmin", false);
-                    expect(data.User).to.have.property("UserID", 5);
+                    expect(_data.User).to.have.property("AuthToken");
+                    expect(_data.User.AuthToken).to.be.ok();
+                    expect(_data.User).to.have.property("IsAdmin", false);
+                    expect(_data.User).to.have.property("UserID", 5);
                     done();
                     context$2$0.next = 21;
                     break;
@@ -3785,7 +3801,8 @@ describe("POST: /login", function () {
     });
 
     it("should return User and Company info after success admin login", function callee$1$0(done) {
-        var data;
+        var _data2;
+
         return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
             while (1) switch (context$2$0.prev = context$2$0.next) {
                 case 0:
@@ -3794,20 +3811,20 @@ describe("POST: /login", function () {
                     return regeneratorRuntime.awrap((0, _utils.login)("admin", "password"));
 
                 case 3:
-                    data = context$2$0.sent;
+                    _data2 = context$2$0.sent;
 
-                    expect(data).to.have.property("Company");
-                    expect(data).to.have.property("User");
-                    expect(data.Company).to.be.an(Array);
-                    expect(data.Company[0]).to.have.property("CompanyName");
-                    expect(data.Company[0]).to.have.property("IsActive");
-                    expect(data.Company[0]).to.have.property("IsBlocked");
-                    expect(data.Company[0]).to.have.property("PersonCompanyID", 1);
+                    expect(_data2).to.have.property("Company");
+                    expect(_data2).to.have.property("User");
+                    expect(_data2.Company).to.be.an(Array);
+                    expect(_data2.Company[0]).to.have.property("CompanyName");
+                    expect(_data2.Company[0]).to.have.property("IsActive");
+                    expect(_data2.Company[0]).to.have.property("IsBlocked");
+                    expect(_data2.Company[0]).to.have.property("PersonCompanyID", 1);
 
-                    expect(data.User).to.have.property("AuthToken");
-                    expect(data.User.AuthToken).to.be.ok();
-                    expect(data.User).to.have.property("IsAdmin", true);
-                    expect(data.User).to.have.property("UserID", 1);
+                    expect(_data2.User).to.have.property("AuthToken");
+                    expect(_data2.User.AuthToken).to.be.ok();
+                    expect(_data2.User).to.have.property("IsAdmin", true);
+                    expect(_data2.User).to.have.property("UserID", 1);
                     done();
                     context$2$0.next = 21;
                     break;
@@ -3823,6 +3840,68 @@ describe("POST: /login", function () {
                     return context$2$0.stop();
             }
         }, null, _this, [[0, 18]]);
+    });
+});
+
+describe("POST: /api/admin/getadwertiserlist", function () {
+    it("should return Unauthorized:401 for Unauthorized admin", function callee$1$0(done) {
+        var adwertisers;
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    context$2$0.next = 3;
+                    return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST")));
+
+                case 3:
+                    adwertisers = context$2$0.sent;
+
+                    done(new Error("Unauthorized:401 was expected"));
+                    context$2$0.next = 11;
+                    break;
+
+                case 7:
+                    context$2$0.prev = 7;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    expect(context$2$0.t0).to.be.a(_errors.Unauthorized);
+                    done();
+
+                case 11:
+                case "end":
+                    return context$2$0.stop();
+            }
+        }, null, _this, [[0, 7]]);
+    });
+
+    it("should return OK:200 with adwertisers list", function callee$1$0(done) {
+        var token, adwertisers;
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    token = (0, _utils.login)("admin", "password", true);
+                    context$2$0.next = 4;
+                    return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+
+                case 4:
+                    adwertisers = context$2$0.sent;
+
+                    expect(adwertisers).to.be.ok();
+                    context$2$0.next = 11;
+                    break;
+
+                case 8:
+                    context$2$0.prev = 8;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    done(context$2$0.t0);
+
+                case 11:
+                case "end":
+                    return context$2$0.stop();
+            }
+        }, null, _this, [[0, 8]]);
     });
 });
 
@@ -3915,7 +3994,6 @@ describe("POST: /api/admin/createadwertiser", function () {
                     expect(adwertiser).to.have.property("Payment");
 
                     done();
-
                     context$2$0.next = 13;
                     break;
 
@@ -3931,6 +4009,48 @@ describe("POST: /api/admin/createadwertiser", function () {
             }
         }, null, _this, [[0, 10]]);
     });
+
+    it.skip("should edit adwertiser info  by admin", function callee$1$0(done) {
+        var token, adwertiserList;
+        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+                case 0:
+                    context$2$0.prev = 0;
+                    token = (0, _utils.login)("admin", "password", true);
+                    context$2$0.next = 4;
+                    return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+
+                case 4:
+                    adwertiserList = context$2$0.sent;
+
+                    // let adwertiser = await createAdwertiser(data.adwertiser);
+                    // let editedAdwertiser = await editAdwertiser(adwertiser.id, {
+                    //     Name: "edited",
+                    //     Contact: "edited",
+                    //     Email: data.adwertiser.Email
+                    // });
+
+                    // console.log(editedAdwertiser);
+
+                    // expect(adwertiser).to.be.ok();
+                    // expect(adwertiser).to.have.property("Name", "edited");
+                    done();
+                    context$2$0.next = 12;
+                    break;
+
+                case 8:
+                    context$2$0.prev = 8;
+                    context$2$0.t0 = context$2$0["catch"](0);
+
+                    console.log(context$2$0.t0);
+                    done(context$2$0.t0);
+
+                case 12:
+                case "end":
+                    return context$2$0.stop();
+            }
+        }, null, _this, [[0, 8]]);
+    });
 });
 
 },{"../errors":94,"../urls":96,"../utils":97,"babelify/polyfill":93}],96:[function(require,module,exports){
@@ -3943,7 +4063,9 @@ var apiUrl = "http://pinpointapi.geowavestaging.com/api";
 
 var urls = {
     LOGIN: "/login",
-    CREATE_ADWERTISER: "/admin/createadvertiser"
+    CREATE_ADWERTISER: "/admin/createadvertiser",
+    EDIT_ADWERTISER: "/admin/editadvertiser",
+    ADWERTISER_LIST: "/admin/getadvertiserlist"
 };
 
 var url = function url(path) {
@@ -3966,33 +4088,45 @@ var _urls = require("./urls");
 
 var _errors = require("./errors");
 
+var data = {
+    adwertiser: {
+        "Name": "SergeyVayser",
+        "Contact": "test",
+        "Email": "wice242@gmail.com",
+        "Password": "qQ190301",
+        "Address": "holoseevskoe ave",
+        "City": "Kiev",
+        "Postcode": "NE11JF",
+        "Sales": "test",
+        "Billing": "test",
+        "Payment": "test",
+        "Package": "test"
+    }
+};
+
 var request = function request(options) {
-    return regeneratorRuntime.async(function request$(context$1$0) {
-        while (1) switch (context$1$0.prev = context$1$0.next) {
-            case 0:
-                options.headers = options.headers || {};
-                return context$1$0.abrupt("return", new Promise(function (resolve, reject) {
-                    superagent[options.method](options.url).set(options.headers).send(options.data).end(function (err, res) {
-                        if (err) {
-                            return reject(err);
-                        }
-                        if (res.status === 400) {
-                            return reject(new _errors.BadRequest(res.body));
-                        }
+    options.headers = options.headers || {};
+    return new Promise(function (resolve, reject) {
+        superagent[options.method](options.url).set(options.headers).send(options.data).end(function (err, res) {
+            if (err) {
+                return reject(err);
+            }
 
-                        if (res.status === 500) {
-                            return reject(new Error(res.body));
-                        }
+            if (res.status === 400) {
+                return reject(new _errors.BadRequest(res.body));
+            }
 
-                        resolve(res.body);
-                    });
-                }));
+            if (res.status === 401) {
+                return reject(new _errors.Unauthorized(res.body));
+            }
 
-            case 2:
-            case "end":
-                return context$1$0.stop();
-        }
-    }, null, _this);
+            if (res.status === 500) {
+                return reject(new _errors.ServerError(res.body));
+            }
+
+            resolve(res.body);
+        });
+    });
 };
 
 var post = function post(url, data, headers) {
@@ -4016,7 +4150,8 @@ var post = function post(url, data, headers) {
     }, null, _this);
 };
 
-var login = function login(EmailAddress, Password) {
+var login = function login(EmailAddress, Password, justToken) {
+    var data;
     return regeneratorRuntime.async(function login$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
@@ -4024,9 +4159,19 @@ var login = function login(EmailAddress, Password) {
                 return regeneratorRuntime.awrap(post((0, _urls.url)("LOGIN"), { EmailAddress: EmailAddress, Password: Password }));
 
             case 2:
-                return context$1$0.abrupt("return", context$1$0.sent);
+                data = context$1$0.sent;
 
-            case 3:
+                if (!justToken) {
+                    context$1$0.next = 5;
+                    break;
+                }
+
+                return context$1$0.abrupt("return", data.User.AuthToken);
+
+            case 5:
+                return context$1$0.abrupt("return", data);
+
+            case 6:
             case "end":
                 return context$1$0.stop();
         }
@@ -4056,7 +4201,30 @@ var createAdwertiser = function createAdwertiser(data) {
     }, null, _this);
 };
 
-exports["default"] = { request: request, post: post, login: login, createAdwertiser: createAdwertiser };
+var editAdwertiser = function editAdwertiser(id, data) {
+    var loginData;
+    return regeneratorRuntime.async(function editAdwertiser$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                context$1$0.next = 2;
+                return regeneratorRuntime.awrap(login("admin", "password"));
+
+            case 2:
+                loginData = context$1$0.sent;
+                context$1$0.next = 5;
+                return regeneratorRuntime.awrap(post((0, _urls.url)("EDIT_ADWERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
+
+            case 5:
+                return context$1$0.abrupt("return", context$1$0.sent);
+
+            case 6:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, _this);
+};
+
+exports["default"] = { request: request, post: post, login: login, createAdwertiser: createAdwertiser, editAdwertiser: editAdwertiser, data: data };
 module.exports = exports["default"];
 
 },{"./errors":94,"./urls":96}],98:[function(require,module,exports){

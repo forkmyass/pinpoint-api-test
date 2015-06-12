@@ -36,4 +36,14 @@ class BadRequest extends Error {
     }
 }
 
-export default {NotFound, Forbidden, Unauthorized, BadRequest}
+class ServerError extends Error {
+    constructor(body) {
+        super(body);
+        this.code = 500;
+        this.body = body;
+        Error.captureStackTrace(this);
+    }
+}
+
+
+export default {NotFound, Forbidden, Unauthorized, BadRequest, ServerError}
