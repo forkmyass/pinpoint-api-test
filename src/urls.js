@@ -6,7 +6,9 @@ var urls = {
     EDIT_ADVERTISER: "/admin/editadvertiser",
     ADVERTISER_LIST: "/admin/getadvertiserlist",
     CAMPAIGN_LIST: "/admin/getcampaignlist",
-    REPORT_LIST: "/admin/getreportlist"
+    REPORT_LIST: "/admin/getreportlist",
+    SUSPEND_ADVERTISER: "/admin/suspendadvertiser",
+    EMULATE_ADVERTISER: "/admin/emulateadvertiser"
 };
 
 var url = (path) => {
