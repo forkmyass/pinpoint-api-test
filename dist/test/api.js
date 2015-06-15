@@ -3611,12 +3611,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 var NotFound = (function (_Error) {
-    function NotFound(path) {
+    function NotFound(body) {
         _classCallCheck(this, NotFound);
 
-        _get(Object.getPrototypeOf(NotFound.prototype), 'constructor', this).call(this, path);
+        _get(Object.getPrototypeOf(NotFound.prototype), 'constructor', this).call(this, body);
         this.code = 404;
-        this.path = path;
+        this.body = body;
         Error.captureStackTrace(this);
     }
 
@@ -3626,12 +3626,12 @@ var NotFound = (function (_Error) {
 })(Error);
 
 var Forbidden = (function (_Error2) {
-    function Forbidden(path) {
+    function Forbidden(body) {
         _classCallCheck(this, Forbidden);
 
-        _get(Object.getPrototypeOf(Forbidden.prototype), 'constructor', this).call(this, path);
+        _get(Object.getPrototypeOf(Forbidden.prototype), 'constructor', this).call(this, body);
         this.code = 403;
-        this.path = path;
+        this.body = body;
         Error.captureStackTrace(this);
     }
 
@@ -3641,11 +3641,11 @@ var Forbidden = (function (_Error2) {
 })(Error);
 
 var Unauthorized = (function (_Error3) {
-    function Unauthorized(msg) {
+    function Unauthorized(body) {
         _classCallCheck(this, Unauthorized);
 
-        _get(Object.getPrototypeOf(Unauthorized.prototype), 'constructor', this).call(this, msg);
-        this.message = msg || 'Unauthorized';
+        _get(Object.getPrototypeOf(Unauthorized.prototype), 'constructor', this).call(this, body);
+        this.body = body || 'Unauthorized';
         this.code = 401;
         Error.captureStackTrace(this);
     }
@@ -3702,356 +3702,465 @@ var _urls = require("../urls");
 
 require("babelify/polyfill");
 
-describe("POST: /login", function () {
-    it("should return BadRequest:400 for invalid login credentials", function callee$1$0(done) {
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.login)("wrongEmail", "wrongPass"));
+describe("Login", function () {
+    describe("POST: /login", function () {
+        it("should return BadRequest:400 for invalid login credentials", function callee$2$0(done) {
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.login)("wrongEmail", "wrongPass"));
 
-                case 3:
-                    done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
-                    context$2$0.next = 10;
-                    break;
+                    case 3:
+                        done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
+                        context$3$0.next = 12;
+                        break;
 
-                case 6:
-                    context$2$0.prev = 6;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                    case 6:
+                        context$3$0.prev = 6;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-                    expect(context$2$0.t0).to.be.a(_errors.BadRequest);
-                    done();
+                        expect(context$3$0.t0).to.be.a(_errors.BadRequest);
+                        expect(context$3$0.t0.body).to.have.property("Error");
+                        expect(context$3$0.t0.body.Error).to.have.property("Message");
+                        done();
 
-                case 10:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 6]]);
-    });
+                    case 12:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 6]]);
+        });
 
-    it("should return json with \"Error.Message\" keys {Error: {Message: 'invalid password'}} for invalid login credentials", function callee$1$0(done) {
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.login)("wrongEmail", "wrongPass"));
+        it("should return User and Company info after success adwertiser login", function callee$2$0(done) {
+            var _data;
 
-                case 3:
-                    done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
-                    context$2$0.next = 11;
-                    break;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.login)("multiplelogin", "password"));
 
-                case 6:
-                    context$2$0.prev = 6;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                    case 3:
+                        _data = context$3$0.sent;
 
-                    expect(context$2$0.t0.body).to.have.property("Error");
-                    expect(context$2$0.t0.body.Error).to.have.property("Message");
-                    done();
+                        expect(_data).to.have.property("Company");
+                        expect(_data).to.have.property("User");
+                        expect(_data.Company).to.be.an(Array);
+                        expect(_data.Company[0]).to.have.property("CompanyName");
+                        expect(_data.Company[0]).to.have.property("IsActive");
+                        expect(_data.Company[0]).to.have.property("IsBlocked");
+                        expect(_data.Company[0]).to.have.property("PersonCompanyID", 5);
 
-                case 11:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 6]]);
-    });
+                        expect(_data.User).to.have.property("AuthToken");
+                        expect(_data.User.AuthToken).to.be.ok();
+                        expect(_data.User).to.have.property("IsAdmin", false);
+                        expect(_data.User).to.have.property("UserID", 5);
+                        done();
+                        context$3$0.next = 21;
+                        break;
 
-    it("should return User and Company info after success adwertiser login", function callee$1$0(done) {
-        var _data;
+                    case 18:
+                        context$3$0.prev = 18;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.login)("multiplelogin", "password"));
+                        done(context$3$0.t0);
 
-                case 3:
-                    _data = context$2$0.sent;
+                    case 21:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 18]]);
+        });
 
-                    expect(_data).to.have.property("Company");
-                    expect(_data).to.have.property("User");
-                    expect(_data.Company).to.be.an(Array);
-                    expect(_data.Company[0]).to.have.property("CompanyName");
-                    expect(_data.Company[0]).to.have.property("IsActive");
-                    expect(_data.Company[0]).to.have.property("IsBlocked");
-                    expect(_data.Company[0]).to.have.property("PersonCompanyID", 5);
+        it("should return User and Company info after success admin login", function callee$2$0(done) {
+            var _data2;
 
-                    expect(_data.User).to.have.property("AuthToken");
-                    expect(_data.User.AuthToken).to.be.ok();
-                    expect(_data.User).to.have.property("IsAdmin", false);
-                    expect(_data.User).to.have.property("UserID", 5);
-                    done();
-                    context$2$0.next = 21;
-                    break;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.login)("admin", "password"));
 
-                case 18:
-                    context$2$0.prev = 18;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                    case 3:
+                        _data2 = context$3$0.sent;
 
-                    done(context$2$0.t0);
+                        expect(_data2).to.have.property("Company");
+                        expect(_data2).to.have.property("User");
+                        expect(_data2.Company).to.be.an(Array);
+                        expect(_data2.Company[0]).to.have.property("CompanyName");
+                        expect(_data2.Company[0]).to.have.property("IsActive");
+                        expect(_data2.Company[0]).to.have.property("IsBlocked");
+                        expect(_data2.Company[0]).to.have.property("PersonCompanyID", 1);
 
-                case 21:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 18]]);
-    });
+                        expect(_data2.User).to.have.property("AuthToken");
+                        expect(_data2.User.AuthToken).to.be.ok();
+                        expect(_data2.User).to.have.property("IsAdmin", true);
+                        expect(_data2.User).to.have.property("UserID", 1);
+                        done();
+                        context$3$0.next = 21;
+                        break;
 
-    it("should return User and Company info after success admin login", function callee$1$0(done) {
-        var _data2;
+                    case 18:
+                        context$3$0.prev = 18;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.login)("admin", "password"));
+                        done(context$3$0.t0);
 
-                case 3:
-                    _data2 = context$2$0.sent;
-
-                    expect(_data2).to.have.property("Company");
-                    expect(_data2).to.have.property("User");
-                    expect(_data2.Company).to.be.an(Array);
-                    expect(_data2.Company[0]).to.have.property("CompanyName");
-                    expect(_data2.Company[0]).to.have.property("IsActive");
-                    expect(_data2.Company[0]).to.have.property("IsBlocked");
-                    expect(_data2.Company[0]).to.have.property("PersonCompanyID", 1);
-
-                    expect(_data2.User).to.have.property("AuthToken");
-                    expect(_data2.User.AuthToken).to.be.ok();
-                    expect(_data2.User).to.have.property("IsAdmin", true);
-                    expect(_data2.User).to.have.property("UserID", 1);
-                    done();
-                    context$2$0.next = 21;
-                    break;
-
-                case 18:
-                    context$2$0.prev = 18;
-                    context$2$0.t0 = context$2$0["catch"](0);
-
-                    done(context$2$0.t0);
-
-                case 21:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 18]]);
+                    case 21:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 18]]);
+        });
     });
 });
 
-describe("POST: /api/admin/getadwertiserlist", function () {
-    it("should return Unauthorized:401 for Unauthorized admin", function callee$1$0(done) {
-        var adwertisers;
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST")));
+describe("AdminList", function () {
+    describe("POST: /api/admin/getadwertiserlist", function () {
+        it("should return Unauthorized:401 for Unauthorized admin", function callee$2$0(done) {
+            var adwertisers;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST")));
 
-                case 3:
-                    adwertisers = context$2$0.sent;
+                    case 3:
+                        adwertisers = context$3$0.sent;
 
-                    done(new Error("Unauthorized:401 was expected"));
-                    context$2$0.next = 11;
-                    break;
+                        done(new Error("Unauthorized:401 was expected"));
+                        context$3$0.next = 13;
+                        break;
 
-                case 7:
-                    context$2$0.prev = 7;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                    case 7:
+                        context$3$0.prev = 7;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-                    expect(context$2$0.t0).to.be.a(_errors.Unauthorized);
-                    done();
+                        expect(context$3$0.t0).to.be.a(_errors.Unauthorized);
+                        expect(context$3$0.t0.body).to.have.property("Error");
+                        expect(context$3$0.t0.body.Error).to.have.property("Message");
+                        done();
 
-                case 11:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 7]]);
+                    case 13:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 7]]);
+        });
+
+        it("should return OK:200 with adwertisers list", function callee$2$0(done) {
+            var token, adwertisers;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.login)("admin", "password", true));
+
+                    case 3:
+                        token = context$3$0.sent;
+                        context$3$0.next = 6;
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+
+                    case 6:
+                        adwertisers = context$3$0.sent;
+
+                        expect(adwertisers).to.be.ok();
+                        done();
+                        context$3$0.next = 14;
+                        break;
+
+                    case 11:
+                        context$3$0.prev = 11;
+                        context$3$0.t0 = context$3$0["catch"](0);
+
+                        done(context$3$0.t0);
+
+                    case 14:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 11]]);
+        });
     });
 
-    it("should return OK:200 with adwertisers list", function callee$1$0(done) {
-        var token, adwertisers;
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    token = (0, _utils.login)("admin", "password", true);
-                    context$2$0.next = 4;
-                    return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+    describe("POST: /api/admin/getcampaignlist", function () {
+        it("should return Unauthorized:401 for Unauthorized admin", function callee$2$0(done) {
+            var campaigns;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("CAMPAIGN_LIST")));
 
-                case 4:
-                    adwertisers = context$2$0.sent;
+                    case 3:
+                        campaigns = context$3$0.sent;
 
-                    expect(adwertisers).to.be.ok();
-                    done();
-                    context$2$0.next = 12;
-                    break;
+                        done(new Error("Unauthorized:401 was expected"));
+                        context$3$0.next = 13;
+                        break;
 
-                case 9:
-                    context$2$0.prev = 9;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                    case 7:
+                        context$3$0.prev = 7;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-                    done(context$2$0.t0);
+                        expect(context$3$0.t0).to.be.a(_errors.Unauthorized);
+                        expect(context$3$0.t0.body).to.have.property("Error");
+                        expect(context$3$0.t0.body.Error).to.have.property("Message");
+                        done();
 
-                case 12:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 9]]);
+                    case 13:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 7]]);
+        });
+
+        it("should return OK:200 with campaign list e.g [{}, {}, {}] or empty list []", function callee$2$0(done) {
+            var token, campaigns;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.login)("admin", "password", true));
+
+                    case 3:
+                        token = context$3$0.sent;
+                        context$3$0.next = 6;
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("CAMPAIGN_LIST"), {}, { "Authorization-Token": token }));
+
+                    case 6:
+                        campaigns = context$3$0.sent;
+
+                        expect(campaigns).to.be.ok();
+                        expect(campaigns).to.be.an(Array);
+                        done();
+                        context$3$0.next = 15;
+                        break;
+
+                    case 12:
+                        context$3$0.prev = 12;
+                        context$3$0.t0 = context$3$0["catch"](0);
+
+                        done(context$3$0.t0);
+
+                    case 15:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 12]]);
+        });
+    });
+
+    describe("POST: /api/admin/getreportlist", function () {
+        it("should return Unauthorized:401 for Unauthorized admin", function callee$2$0(done) {
+            var reports;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("REPORT_LIST")));
+
+                    case 3:
+                        reports = context$3$0.sent;
+
+                        done(new Error("Unauthorized:401 was expected"));
+                        context$3$0.next = 13;
+                        break;
+
+                    case 7:
+                        context$3$0.prev = 7;
+                        context$3$0.t0 = context$3$0["catch"](0);
+
+                        expect(context$3$0.t0).to.be.a(_errors.Unauthorized);
+                        expect(context$3$0.t0.body).to.have.property("Error");
+                        expect(context$3$0.t0.body.Error).to.have.property("Message");
+                        done();
+
+                    case 13:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 7]]);
+        });
+
+        it("should return OK:200 with report property {Report:[{CSV, Date, Description, Name}, {...}]", function callee$2$0(done) {
+            var token, _data3;
+
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.login)("admin", "password", true));
+
+                    case 3:
+                        token = context$3$0.sent;
+                        context$3$0.next = 6;
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("REPORT_LIST"), {}, { "Authorization-Token": token }));
+
+                    case 6:
+                        _data3 = context$3$0.sent;
+
+                        expect(_data3).to.be.ok();
+                        expect(_data3.Report).to.be.an(Array);
+                        expect(_data3.Report[0]).to.have.property("CSV");
+                        expect(_data3.Report[0]).to.have.property("Date");
+                        expect(_data3.Report[0]).to.have.property("Description");
+                        expect(_data3.Report[0]).to.have.property("Name");
+                        done();
+                        context$3$0.next = 19;
+                        break;
+
+                    case 16:
+                        context$3$0.prev = 16;
+                        context$3$0.t0 = context$3$0["catch"](0);
+
+                        done(context$3$0.t0);
+
+                    case 19:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 16]]);
+        });
     });
 });
 
-describe("POST: /api/admin/createadwertiser", function () {
-    it("should return BadRequest:400 for invalid adwertiser data", function callee$1$0() {
-        var adwertiser;
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.createAdwertiser)());
+describe("AdminAdwertiser", function () {
+    describe("POST: /api/admin/createadwertiser", function () {
+        it("should return BadRequest:400 for invalid adwertiser data", function callee$2$0() {
+            var adwertiser;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.createAdwertiser)());
 
-                case 3:
-                    adwertiser = context$2$0.sent;
+                    case 3:
+                        adwertiser = context$3$0.sent;
 
-                    done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
-                    context$2$0.next = 10;
-                    break;
+                        done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
+                        context$3$0.next = 12;
+                        break;
 
-                case 7:
-                    context$2$0.prev = 7;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                    case 7:
+                        context$3$0.prev = 7;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-                    expect(context$2$0.t0).to.be.a(_errors.BadRequest);
+                        expect(context$3$0.t0).to.be.a(_errors.BadRequest);
+                        expect(context$3$0.t0.body).to.have.property("Error");
+                        expect(context$3$0.t0.body.Error).to.have.property("Message");
 
-                case 10:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 7]]);
+                    case 12:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 7]]);
+        });
+
+        it("should return adwertiser info after creation adwertiser by admin", function callee$2$0(done) {
+            var adwertiser;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.createAdwertiser)({
+                            "Name": "SergeyVayser",
+                            "Contact": "test",
+                            "Email": "wice242@gmail.com",
+                            "Password": "qQ190301",
+                            "Address": "holoseevskoe ave",
+                            "City": "Kiev",
+                            "Postcode": "NE11JF",
+                            "Sales": "test",
+                            "Billing": "test",
+                            "Payment": "test",
+                            "Package": "test"
+                        }));
+
+                    case 3:
+                        adwertiser = context$3$0.sent;
+
+                        expect(adwertiser).to.be.ok();
+                        expect(adwertiser).to.have.property("Package");
+                        expect(adwertiser).to.have.property("Payment");
+
+                        done();
+                        context$3$0.next = 13;
+                        break;
+
+                    case 10:
+                        context$3$0.prev = 10;
+                        context$3$0.t0 = context$3$0["catch"](0);
+
+                        done(context$3$0.t0);
+
+                    case 13:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 10]]);
+        });
     });
 
-    it("should return json with \"Error.Message\" keys {Error: {Message: \"firstName is too short\"}} for invalid adwertiser data", function callee$1$0() {
-        var adwertiser;
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.createAdwertiser)({}));
+    describe("POST: /api/admin/editadwertiser", function () {
+        it("should edit adwertiser info  by admin", function callee$2$0(done) {
+            var list, adwertiser, editedAdwertiser;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+                while (1) switch (context$3$0.prev = context$3$0.next) {
+                    case 0:
+                        context$3$0.prev = 0;
+                        context$3$0.next = 3;
+                        return regeneratorRuntime.awrap((0, _utils.adwertiserList)());
 
-                case 3:
-                    adwertiser = context$2$0.sent;
+                    case 3:
+                        list = context$3$0.sent;
+                        adwertiser = list[0];
+                        context$3$0.next = 7;
+                        return regeneratorRuntime.awrap((0, _utils.editAdwertiser)(adwertiser.id, {
+                            Name: "edited",
+                            Contact: "edited",
+                            Email: _utils.data.adwertiser.Email,
+                            PersonCompanyID: adwertiser.PersonCompanyID
+                        }));
 
-                    done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
-                    context$2$0.next = 11;
-                    break;
+                    case 7:
+                        editedAdwertiser = context$3$0.sent;
 
-                case 7:
-                    context$2$0.prev = 7;
-                    context$2$0.t0 = context$2$0["catch"](0);
+                        // expect(adwertiser).to.be.ok();
+                        // expect(adwertiser).to.have.property("Name", "edited");
+                        done();
+                        context$3$0.next = 14;
+                        break;
 
-                    expect(context$2$0.t0.body).to.have.property("Error");
-                    expect(context$2$0.t0.body.Error).to.have.property("Message");
+                    case 11:
+                        context$3$0.prev = 11;
+                        context$3$0.t0 = context$3$0["catch"](0);
 
-                case 11:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 7]]);
+                        done(context$3$0.t0);
+
+                    case 14:
+                    case "end":
+                        return context$3$0.stop();
+                }
+            }, null, _this, [[0, 11]]);
+        });
     });
 
-    it("should return adwertiser info after creation adwertiser by admin", function callee$1$0(done) {
-        var adwertiser;
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    context$2$0.next = 3;
-                    return regeneratorRuntime.awrap((0, _utils.createAdwertiser)({
-                        "Name": "SergeyVayser",
-                        "Contact": "test",
-                        "Email": "wice242@gmail.com",
-                        "Password": "qQ190301",
-                        "Address": "holoseevskoe ave",
-                        "City": "Kiev",
-                        "Postcode": "NE11JF",
-                        "Sales": "test",
-                        "Billing": "test",
-                        "Payment": "test",
-                        "Package": "test"
-                    }));
+    describe("POST: /api/admin/emulateadvertiser", function () {});
 
-                case 3:
-                    adwertiser = context$2$0.sent;
-
-                    expect(adwertiser).to.be.ok();
-                    expect(adwertiser).to.have.property("Package");
-                    expect(adwertiser).to.have.property("Payment");
-
-                    done();
-                    context$2$0.next = 13;
-                    break;
-
-                case 10:
-                    context$2$0.prev = 10;
-                    context$2$0.t0 = context$2$0["catch"](0);
-
-                    done(context$2$0.t0);
-
-                case 13:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 10]]);
-    });
-
-    it.skip("should edit adwertiser info  by admin", function callee$1$0(done) {
-        var token, adwertiserList;
-        return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-            while (1) switch (context$2$0.prev = context$2$0.next) {
-                case 0:
-                    context$2$0.prev = 0;
-                    token = (0, _utils.login)("admin", "password", true);
-                    context$2$0.next = 4;
-                    return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
-
-                case 4:
-                    adwertiserList = context$2$0.sent;
-
-                    // let adwertiser = await createAdwertiser(data.adwertiser);
-                    // let editedAdwertiser = await editAdwertiser(adwertiser.id, {
-                    //     Name: "edited",
-                    //     Contact: "edited",
-                    //     Email: data.adwertiser.Email
-                    // });
-
-                    // console.log(editedAdwertiser);
-
-                    // expect(adwertiser).to.be.ok();
-                    // expect(adwertiser).to.have.property("Name", "edited");
-                    done();
-                    context$2$0.next = 12;
-                    break;
-
-                case 8:
-                    context$2$0.prev = 8;
-                    context$2$0.t0 = context$2$0["catch"](0);
-
-                    console.log(context$2$0.t0);
-                    done(context$2$0.t0);
-
-                case 12:
-                case "end":
-                    return context$2$0.stop();
-            }
-        }, null, _this, [[0, 8]]);
-    });
+    describe("POST: /api/admin/suspendadwertiser", function () {});
 });
 
 },{"../errors":94,"../urls":96,"../utils":97,"babelify/polyfill":93}],96:[function(require,module,exports){
@@ -4066,7 +4175,9 @@ var urls = {
     LOGIN: "/login",
     CREATE_ADWERTISER: "/admin/createadvertiser",
     EDIT_ADWERTISER: "/admin/editadvertiser",
-    ADWERTISER_LIST: "/admin/getadvertiserlist"
+    ADWERTISER_LIST: "/admin/getadvertiserlist",
+    CAMPAIGN_LIST: "/admin/getcampaignlist",
+    REPORT_LIST: "/admin/getreportlist"
 };
 
 var url = function url(path) {
@@ -4119,6 +4230,10 @@ var request = function request(options) {
 
             if (res.status === 401) {
                 return reject(new _errors.Unauthorized(res.body));
+            }
+
+            if (res.status === 403) {
+                return reject(new _errors.Forbidden(res.body));
             }
 
             if (res.status === 500) {
@@ -4225,7 +4340,31 @@ var editAdwertiser = function editAdwertiser(id, data) {
     }, null, _this);
 };
 
-exports["default"] = { request: request, post: post, login: login, createAdwertiser: createAdwertiser, editAdwertiser: editAdwertiser, data: data };
+var adwertiserList = function adwertiserList() {
+    var token, data;
+    return regeneratorRuntime.async(function adwertiserList$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+            case 0:
+                context$1$0.next = 2;
+                return regeneratorRuntime.awrap(login("admin", "password", true));
+
+            case 2:
+                token = context$1$0.sent;
+                context$1$0.next = 5;
+                return regeneratorRuntime.awrap(post((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+
+            case 5:
+                data = context$1$0.sent;
+                return context$1$0.abrupt("return", data.Advertiser);
+
+            case 7:
+            case "end":
+                return context$1$0.stop();
+        }
+    }, null, _this);
+};
+
+exports["default"] = { request: request, post: post, login: login, createAdwertiser: createAdwertiser, editAdwertiser: editAdwertiser, adwertiserList: adwertiserList, data: data };
 module.exports = exports["default"];
 
 },{"./errors":94,"./urls":96}],98:[function(require,module,exports){

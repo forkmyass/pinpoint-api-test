@@ -1,26 +1,26 @@
 
 class NotFound extends Error {
-    constructor(path) {
-        super(path);
+    constructor(body) {
+        super(body);
         this.code = 404;
-        this.path = path;
+        this.body = body;
         Error.captureStackTrace(this);
     }
 }
 
 class Forbidden extends Error {
-    constructor(path) {
-        super(path);
+    constructor(body) {
+        super(body);
         this.code = 403;
-        this.path = path;
+        this.body = body;
         Error.captureStackTrace(this);
     }
 }
 
 class Unauthorized extends Error {
-    constructor(msg) {
-        super(msg);
-        this.message = msg || 'Unauthorized';
+    constructor(body) {
+        super(body);
+        this.body = body || 'Unauthorized';
         this.code = 401;
         Error.captureStackTrace(this);
     }

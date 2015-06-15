@@ -1,5 +1,5 @@
 import {url} from "./urls";
-import {BadRequest, ServerError, Unauthorized} from "./errors";
+import {BadRequest, ServerError, Unauthorized, Forbidden} from "./errors";
 
 let data = {
     adwertiser: {
@@ -33,6 +33,10 @@ let request = (options) => {
                 return reject(new Unauthorized(res.body));
             }
 
+            if (res.status === 403) {
+                return reject(new Forbidden(res.body));
+            }
+
             if (res.status === 500) {
                 return reject(new ServerError(res.body));
             }
@@ -64,4 +68,10 @@ let editAdwertiser = async (id, data) => {
     return await post(url("EDIT_ADWERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
 }
 
-export default {request, post, login, createAdwertiser, editAdwertiser, data}
+let adwertiserList = async () => {
+    let token = await login("admin", "password", true);
+    let data =  await post(url("ADWERTISER_LIST"), {}, {"Authorization-Token": token});
+    return data.Advertiser
+}
+
+export default {request, post, login, createAdwertiser, editAdwertiser, adwertiserList, data}
