@@ -86,6 +86,7 @@ describe("POST: /api/admin/getadwertiserlist", () => {
             let token = login("admin", "password", true);
             let adwertisers = await post(url("ADWERTISER_LIST"), {}, {"Authorization-Token": token});
             expect(adwertisers).to.be.ok();
+            done();
         } catch (e) {
             done(e);
         }

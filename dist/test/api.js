@@ -3888,20 +3888,21 @@ describe("POST: /api/admin/getadwertiserlist", function () {
                     adwertisers = context$2$0.sent;
 
                     expect(adwertisers).to.be.ok();
-                    context$2$0.next = 11;
+                    done();
+                    context$2$0.next = 12;
                     break;
 
-                case 8:
-                    context$2$0.prev = 8;
+                case 9:
+                    context$2$0.prev = 9;
                     context$2$0.t0 = context$2$0["catch"](0);
 
                     done(context$2$0.t0);
 
-                case 11:
+                case 12:
                 case "end":
                     return context$2$0.stop();
             }
-        }, null, _this, [[0, 8]]);
+        }, null, _this, [[0, 9]]);
     });
 });
 
