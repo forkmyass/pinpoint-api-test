@@ -6,6 +6,8 @@ import {
     login, 
     createAdvertiser, 
     editAdvertiser, 
+    getAdvertisers,
+    activateAdvertiser,
     suspendAdvertiser,
     advertiserList, 
     emulateAdvertiser, 
@@ -57,7 +59,6 @@ describe("Login", () => {
                 expect(data).to.have.property("Company");
                 expect(data).to.have.property("User");
                 expect(data.Company).to.be.an(Array);
-                console.log(data);
                 expect(data.Company[0]).to.have.property("CompanyName");
                 expect(data.Company[0]).to.have.property("IsActive");
                 expect(data.Company[0]).to.have.property("IsBlocked");
@@ -93,7 +94,6 @@ describe("AdminList", () => {
             try {
                 let token = await login("admin", "password", true);
                 let advertisers = await post(url("ADVERTISER_LIST"), {}, {"Authorization-Token": token});
-                console.log(advertisers);
                 expect(advertisers).to.be.ok();
                 done();
             } catch (e) {
@@ -263,7 +263,6 @@ describe("AdminAdvertiser", () => {
                 let data = await emulateAdvertiser();
                 done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
             } catch (e) {
-                console.log(e);
                 expect(e).to.be.a(BadRequest);
                 expect(e.body).to.have.property("Error");
                 expect(e.body.Error).to.have.property("Message");
@@ -320,11 +319,64 @@ describe("AdminAdvertiser", () => {
             }
         });
 
-        it.skip("should return 200:OK after admin suspend advertiser", async (done) => {
+        it("should return 200:OK after admin suspend advertiser", async (done) => {
             try {
-                let advertiser = await createAdvertiser(data.advertiser);
-                console.log(advertiser);
-                let result = await suspendAdvertiser(advertiser.id);
+                let advertisers = await getAdvertisers();
+                let advertiser = advertisers[0]
+                let result = await suspendAdvertiser(advertiser.PersonCompanyID);
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+    });
+
+    describe("POST: /api/admin/activateadvertiser", () => {
+        it("should return Unauthorized:401 for Unauthorized admin", async (done) => {
+            try {
+                let data = await post(url("ACTIVATE_ADVERTISER"));
+                done(new Error("Server should respond with Unauthorized:401 instead of OK:200"));
+            } catch (e) {
+                expect(e).to.be.a(Unauthorized);
+                expect(e.body).to.have.property("Error");
+                expect(e.body.Error).to.have.property("Message");
+                done();
+            }
+        });
+
+        it("should return BadRequest:400 for invalid advertiser data", async (done) => {
+            try {
+                let data = await activateAdvertiser();
+                done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
+            } catch (e) {
+                expect(e).to.be.a(BadRequest);
+                try {
+                    expect(e.body).to.have.property("Error");
+                    expect(e.body.Error).to.have.property("Message");
+                } catch (e) {
+                    done(e);
+                }
+                done();
+            }
+        });
+
+        it("should return 200:OK with advertiser info e.g. {Company:[], User:{}} after admin suspend advertiser", async (done) => {
+            try {
+                let advertisers = await getAdvertisers();
+                let data = await activateAdvertiser(advertisers[0].PersonCompanyID);
+
+                expect(data).to.have.property("Company");
+                expect(data).to.have.property("User");
+                expect(data.Company).to.be.an(Array);
+                expect(data.Company[0]).to.have.property("CompanyName");
+                expect(data.Company[0]).to.have.property("IsActive");
+                expect(data.Company[0]).to.have.property("IsBlocked");
+                expect(data.Company[0]).to.have.property("PersonCompanyID", 1);
+
+                expect(data.User).to.have.property("AuthToken");
+                expect(data.User.AuthToken).to.be.ok();
+                expect(data.User).to.have.property("IsAdmin", true);
+                expect(data.User).to.have.property("UserID", 1);
                 done();
             } catch (e) {
                 done(e);

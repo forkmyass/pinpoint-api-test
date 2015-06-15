@@ -8,6 +8,7 @@ var urls = {
     CAMPAIGN_LIST: "/admin/getcampaignlist",
     REPORT_LIST: "/admin/getreportlist",
     SUSPEND_ADVERTISER: "/admin/suspendadvertiser",
+    ACTIVATE_ADVERTISER: "/admin/activateadvertiser",
     EMULATE_ADVERTISER: "/admin/emulateadvertiser"
 };
 

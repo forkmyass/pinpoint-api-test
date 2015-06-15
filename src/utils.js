@@ -80,10 +80,34 @@ let emulateAdvertiser = async (PersonCompanyID) => {
     return data
 }
 
-let suspendAdvertiser = async (AdvertiserID) => {
+let suspendAdvertiser = async (PersonCompanyID) => {
     let token = await login("admin", "password", true);
-    let data =  await post(url("SUSPEND_ADVERTISER"), {AdvertiserID}, {"Authorization-Token": token});
+    let data =  await post(url("SUSPEND_ADVERTISER"), {PersonCompanyID}, {"Authorization-Token": token});
     return data
 }
 
-export default {request, post, login, createAdvertiser, editAdvertiser, advertiserList, emulateAdvertiser, suspendAdvertiser, data}
+let activateAdvertiser = async (PersonCompanyID) => {
+    let token = await login("admin", "password", true);
+    let data = await post(url("ACTIVATE_ADVERTISER"), {PersonCompanyID}, {"Authorization-Token": token});
+    return data;
+}
+
+let getAdvertisers = async () => {
+    let token = await login("admin", "password", true);
+    let result = await post(url("ADVERTISER_LIST"), {}, {"Authorization-Token": token});
+    return result.Advertiser;
+}
+
+export default {
+    request, 
+    post, 
+    login, 
+    createAdvertiser, 
+    editAdvertiser, 
+    advertiserList, 
+    activateAdvertiser,
+    emulateAdvertiser, 
+    suspendAdvertiser, 
+    getAdvertisers,
+    data
+}
