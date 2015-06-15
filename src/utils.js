@@ -2,7 +2,7 @@ import {url} from "./urls";
 import {BadRequest, ServerError, Unauthorized, Forbidden} from "./errors";
 
 let data = {
-    adwertiser: {
+    advertiser: {
         "Name": "SergeyVayser",
         "Contact": "test",
         "Email": "wice242@gmail.com",
@@ -58,20 +58,20 @@ let login = async (EmailAddress, Password, justToken) => {
     return data;
 }
 
-let createAdwertiser = async (data) => {
+let createAdvertiser = async (data) => {
     let loginData = await login("admin", "password");
-    return await post(url("CREATE_ADWERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
+    return await post(url("CREATE_ADVERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
 };
 
-let editAdwertiser = async (id, data) => {
+let editAdvertiser = async (id, data) => {
     let loginData = await login("admin", "password");
-    return await post(url("EDIT_ADWERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
+    return await post(url("EDIT_ADVERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
 }
 
-let adwertiserList = async () => {
+let advertiserList = async () => {
     let token = await login("admin", "password", true);
-    let data =  await post(url("ADWERTISER_LIST"), {}, {"Authorization-Token": token});
+    let data =  await post(url("ADVERTISER_LIST"), {}, {"Authorization-Token": token});
     return data.Advertiser
 }
 
-export default {request, post, login, createAdwertiser, editAdwertiser, adwertiserList, data}
+export default {request, post, login, createAdvertiser, editAdvertiser, advertiserList, data}

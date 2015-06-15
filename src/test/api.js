@@ -1,6 +1,6 @@
 require("babelify/polyfill");
 import {BadRequest, ServerError, Unauthorized, Forbidden} from "../errors";
-import {request, post, login, createAdwertiser, editAdwertiser, adwertiserList, data} from "../utils";
+import {request, post, login, createAdvertiser, editAdvertiser, advertiserList, data} from "../utils";
 import {url, apiUrl} from "../urls";
 
 describe("Login", () => {
@@ -17,7 +17,7 @@ describe("Login", () => {
             }
         });
 
-        it("should return User and Company info after success adwertiser login", async (done) => {
+        it("should return User and Company info after success advertiser login", async (done) => {
             try {
                 let data = await login("multiplelogin", "password");
 
@@ -64,10 +64,10 @@ describe("Login", () => {
 });
 
 describe("AdminList", () => {
-    describe("POST: /api/admin/getadwertiserlist", () => {
+    describe("POST: /api/admin/getadvertiserlist", () => {
         it("should return Unauthorized:401 for Unauthorized admin", async (done) => {
             try {
-                let adwertisers = await post(url("ADWERTISER_LIST"));
+                let advertisers = await post(url("ADVERTISER_LIST"));
                 done(new Error("Unauthorized:401 was expected"));
             } catch (e) {
                 expect(e).to.be.a(Unauthorized);
@@ -77,11 +77,11 @@ describe("AdminList", () => {
             }
         });
 
-        it("should return OK:200 with adwertisers list", async (done) => {
+        it("should return OK:200 with advertisers list", async (done) => {
             try {
                 let token = await login("admin", "password", true);
-                let adwertisers = await post(url("ADWERTISER_LIST"), {}, {"Authorization-Token": token});
-                expect(adwertisers).to.be.ok();
+                let advertisers = await post(url("ADVERTISER_LIST"), {}, {"Authorization-Token": token});
+                expect(advertisers).to.be.ok();
                 done();
             } catch (e) {
                 done(e);
@@ -146,11 +146,11 @@ describe("AdminList", () => {
     });
 });
 
-describe("AdminAdwertiser", () => {
-    describe("POST: /api/admin/createadwertiser", () => {
-        it("should return BadRequest:400 for invalid adwertiser data", async () => {
+describe("AdminAdvertiser", () => {
+    describe("POST: /api/admin/createadvertiser", () => {
+        it("should return BadRequest:400 for invalid advertiser data", async () => {
             try {
-                let adwertiser = await createAdwertiser();
+                let advertiser = await createAdvertiser();
                 done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
             } catch (e) {
                 expect(e).to.be.a(BadRequest);
@@ -159,9 +159,9 @@ describe("AdminAdwertiser", () => {
             }
         });
 
-        it("should return adwertiser info after creation adwertiser by admin", async (done) => {
+        it("should return advertiser info after creation advertiser by admin", async (done) => {
             try {
-                let adwertiser = await createAdwertiser({
+                let advertiser = await createAdvertiser({
                     "Name": "SergeyVayser",
                     "Contact": "test",
                     "Email": "wice242@gmail.com",
@@ -175,9 +175,9 @@ describe("AdminAdwertiser", () => {
                     "Package": "test"
                 });
 
-                expect(adwertiser).to.be.ok();
-                expect(adwertiser).to.have.property("Package");
-                expect(adwertiser).to.have.property("Payment");
+                expect(advertiser).to.be.ok();
+                expect(advertiser).to.have.property("Package");
+                expect(advertiser).to.have.property("Payment");
 
                 done();
             } catch (e) {
@@ -186,20 +186,20 @@ describe("AdminAdwertiser", () => {
         });
     });
 
-    describe("POST: /api/admin/editadwertiser", () => {
-        it("should edit adwertiser info  by admin", async (done) => {
+    describe("POST: /api/admin/editadvertiser", () => {
+        it("should edit advertiser info  by admin", async (done) => {
             try {
-                let list = await adwertiserList();
-                let adwertiser = list[0];
+                let list = await advertiserList();
+                let advertiser = list[0];
 
-                let editedAdwertiser = await editAdwertiser(adwertiser.id, {
+                let editedAdvertiser = await editAdvertiser(advertiser.id, {
                     Name: "edited",
                     Contact: "edited",
-                    Email: data.adwertiser.Email,
-                    PersonCompanyID: adwertiser.PersonCompanyID
+                    Email: data.advertiser.Email,
+                    PersonCompanyID: advertiser.PersonCompanyID
                 });
-                // expect(adwertiser).to.be.ok();
-                // expect(adwertiser).to.have.property("Name", "edited");
+                // expect(advertiser).to.be.ok();
+                // expect(advertiser).to.have.property("Name", "edited");
                 done();
             } catch (e) {
                 done(e);
@@ -210,7 +210,7 @@ describe("AdminAdwertiser", () => {
     describe("POST: /api/admin/emulateadvertiser", () => {
     });
 
-    describe("POST: /api/admin/suspendadwertiser", () => {
+    describe("POST: /api/admin/suspendadvertiser", () => {
     });
 
 });

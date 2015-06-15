@@ -3733,7 +3733,7 @@ describe("Login", function () {
             }, null, _this, [[0, 6]]);
         });
 
-        it("should return User and Company info after success adwertiser login", function callee$2$0(done) {
+        it("should return User and Company info after success advertiser login", function callee$2$0(done) {
             var _data;
 
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
@@ -3820,18 +3820,18 @@ describe("Login", function () {
 });
 
 describe("AdminList", function () {
-    describe("POST: /api/admin/getadwertiserlist", function () {
+    describe("POST: /api/admin/getadvertiserlist", function () {
         it("should return Unauthorized:401 for Unauthorized admin", function callee$2$0(done) {
-            var adwertisers;
+            var advertisers;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST")));
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADVERTISER_LIST")));
 
                     case 3:
-                        adwertisers = context$3$0.sent;
+                        advertisers = context$3$0.sent;
 
                         done(new Error("Unauthorized:401 was expected"));
                         context$3$0.next = 13;
@@ -3853,8 +3853,8 @@ describe("AdminList", function () {
             }, null, _this, [[0, 7]]);
         });
 
-        it("should return OK:200 with adwertisers list", function callee$2$0(done) {
-            var token, adwertisers;
+        it("should return OK:200 with advertisers list", function callee$2$0(done) {
+            var token, advertisers;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
@@ -3865,12 +3865,12 @@ describe("AdminList", function () {
                     case 3:
                         token = context$3$0.sent;
                         context$3$0.next = 6;
-                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADVERTISER_LIST"), {}, { "Authorization-Token": token }));
 
                     case 6:
-                        adwertisers = context$3$0.sent;
+                        advertisers = context$3$0.sent;
 
-                        expect(adwertisers).to.be.ok();
+                        expect(advertisers).to.be.ok();
                         done();
                         context$3$0.next = 14;
                         break;
@@ -4035,19 +4035,19 @@ describe("AdminList", function () {
     });
 });
 
-describe("AdminAdwertiser", function () {
-    describe("POST: /api/admin/createadwertiser", function () {
-        it("should return BadRequest:400 for invalid adwertiser data", function callee$2$0() {
-            var adwertiser;
+describe("AdminAdvertiser", function () {
+    describe("POST: /api/admin/createadvertiser", function () {
+        it("should return BadRequest:400 for invalid advertiser data", function callee$2$0() {
+            var advertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.createAdwertiser)());
+                        return regeneratorRuntime.awrap((0, _utils.createAdvertiser)());
 
                     case 3:
-                        adwertiser = context$3$0.sent;
+                        advertiser = context$3$0.sent;
 
                         done(new Error("Server should respond with BadRequest:400 instead of OK:200"));
                         context$3$0.next = 12;
@@ -4068,14 +4068,14 @@ describe("AdminAdwertiser", function () {
             }, null, _this, [[0, 7]]);
         });
 
-        it("should return adwertiser info after creation adwertiser by admin", function callee$2$0(done) {
-            var adwertiser;
+        it("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
+            var advertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.createAdwertiser)({
+                        return regeneratorRuntime.awrap((0, _utils.createAdvertiser)({
                             "Name": "SergeyVayser",
                             "Contact": "test",
                             "Email": "wice242@gmail.com",
@@ -4090,11 +4090,11 @@ describe("AdminAdwertiser", function () {
                         }));
 
                     case 3:
-                        adwertiser = context$3$0.sent;
+                        advertiser = context$3$0.sent;
 
-                        expect(adwertiser).to.be.ok();
-                        expect(adwertiser).to.have.property("Package");
-                        expect(adwertiser).to.have.property("Payment");
+                        expect(advertiser).to.be.ok();
+                        expect(advertiser).to.have.property("Package");
+                        expect(advertiser).to.have.property("Payment");
 
                         done();
                         context$3$0.next = 13;
@@ -4114,32 +4114,32 @@ describe("AdminAdwertiser", function () {
         });
     });
 
-    describe("POST: /api/admin/editadwertiser", function () {
-        it("should edit adwertiser info  by admin", function callee$2$0(done) {
-            var list, adwertiser, editedAdwertiser;
+    describe("POST: /api/admin/editadvertiser", function () {
+        it("should edit advertiser info  by admin", function callee$2$0(done) {
+            var list, advertiser, editedAdvertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.adwertiserList)());
+                        return regeneratorRuntime.awrap((0, _utils.advertiserList)());
 
                     case 3:
                         list = context$3$0.sent;
-                        adwertiser = list[0];
+                        advertiser = list[0];
                         context$3$0.next = 7;
-                        return regeneratorRuntime.awrap((0, _utils.editAdwertiser)(adwertiser.id, {
+                        return regeneratorRuntime.awrap((0, _utils.editAdvertiser)(advertiser.id, {
                             Name: "edited",
                             Contact: "edited",
-                            Email: _utils.data.adwertiser.Email,
-                            PersonCompanyID: adwertiser.PersonCompanyID
+                            Email: _utils.data.advertiser.Email,
+                            PersonCompanyID: advertiser.PersonCompanyID
                         }));
 
                     case 7:
-                        editedAdwertiser = context$3$0.sent;
+                        editedAdvertiser = context$3$0.sent;
 
-                        // expect(adwertiser).to.be.ok();
-                        // expect(adwertiser).to.have.property("Name", "edited");
+                        // expect(advertiser).to.be.ok();
+                        // expect(advertiser).to.have.property("Name", "edited");
                         done();
                         context$3$0.next = 14;
                         break;
@@ -4160,7 +4160,7 @@ describe("AdminAdwertiser", function () {
 
     describe("POST: /api/admin/emulateadvertiser", function () {});
 
-    describe("POST: /api/admin/suspendadwertiser", function () {});
+    describe("POST: /api/admin/suspendadvertiser", function () {});
 });
 
 },{"../errors":94,"../urls":96,"../utils":97,"babelify/polyfill":93}],96:[function(require,module,exports){
@@ -4173,9 +4173,9 @@ var apiUrl = "http://pinpointapi.geowavestaging.com/api";
 
 var urls = {
     LOGIN: "/login",
-    CREATE_ADWERTISER: "/admin/createadvertiser",
-    EDIT_ADWERTISER: "/admin/editadvertiser",
-    ADWERTISER_LIST: "/admin/getadvertiserlist",
+    CREATE_ADVERTISER: "/admin/createadvertiser",
+    EDIT_ADVERTISER: "/admin/editadvertiser",
+    ADVERTISER_LIST: "/admin/getadvertiserlist",
     CAMPAIGN_LIST: "/admin/getcampaignlist",
     REPORT_LIST: "/admin/getreportlist"
 };
@@ -4201,7 +4201,7 @@ var _urls = require("./urls");
 var _errors = require("./errors");
 
 var data = {
-    adwertiser: {
+    advertiser: {
         "Name": "SergeyVayser",
         "Contact": "test",
         "Email": "wice242@gmail.com",
@@ -4294,9 +4294,9 @@ var login = function login(EmailAddress, Password, justToken) {
     }, null, _this);
 };
 
-var createAdwertiser = function createAdwertiser(data) {
+var createAdvertiser = function createAdvertiser(data) {
     var loginData;
-    return regeneratorRuntime.async(function createAdwertiser$(context$1$0) {
+    return regeneratorRuntime.async(function createAdvertiser$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
@@ -4305,7 +4305,7 @@ var createAdwertiser = function createAdwertiser(data) {
             case 2:
                 loginData = context$1$0.sent;
                 context$1$0.next = 5;
-                return regeneratorRuntime.awrap(post((0, _urls.url)("CREATE_ADWERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
+                return regeneratorRuntime.awrap(post((0, _urls.url)("CREATE_ADVERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
 
             case 5:
                 return context$1$0.abrupt("return", context$1$0.sent);
@@ -4317,9 +4317,9 @@ var createAdwertiser = function createAdwertiser(data) {
     }, null, _this);
 };
 
-var editAdwertiser = function editAdwertiser(id, data) {
+var editAdvertiser = function editAdvertiser(id, data) {
     var loginData;
-    return regeneratorRuntime.async(function editAdwertiser$(context$1$0) {
+    return regeneratorRuntime.async(function editAdvertiser$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
@@ -4328,7 +4328,7 @@ var editAdwertiser = function editAdwertiser(id, data) {
             case 2:
                 loginData = context$1$0.sent;
                 context$1$0.next = 5;
-                return regeneratorRuntime.awrap(post((0, _urls.url)("EDIT_ADWERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
+                return regeneratorRuntime.awrap(post((0, _urls.url)("EDIT_ADVERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
 
             case 5:
                 return context$1$0.abrupt("return", context$1$0.sent);
@@ -4340,9 +4340,9 @@ var editAdwertiser = function editAdwertiser(id, data) {
     }, null, _this);
 };
 
-var adwertiserList = function adwertiserList() {
+var advertiserList = function advertiserList() {
     var token, data;
-    return regeneratorRuntime.async(function adwertiserList$(context$1$0) {
+    return regeneratorRuntime.async(function advertiserList$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {
             case 0:
                 context$1$0.next = 2;
@@ -4351,7 +4351,7 @@ var adwertiserList = function adwertiserList() {
             case 2:
                 token = context$1$0.sent;
                 context$1$0.next = 5;
-                return regeneratorRuntime.awrap(post((0, _urls.url)("ADWERTISER_LIST"), {}, { "Authorization-Token": token }));
+                return regeneratorRuntime.awrap(post((0, _urls.url)("ADVERTISER_LIST"), {}, { "Authorization-Token": token }));
 
             case 5:
                 data = context$1$0.sent;
@@ -4364,7 +4364,7 @@ var adwertiserList = function adwertiserList() {
     }, null, _this);
 };
 
-exports["default"] = { request: request, post: post, login: login, createAdwertiser: createAdwertiser, editAdwertiser: editAdwertiser, adwertiserList: adwertiserList, data: data };
+exports["default"] = { request: request, post: post, login: login, createAdvertiser: createAdvertiser, editAdvertiser: editAdvertiser, advertiserList: advertiserList, data: data };
 module.exports = exports["default"];
 
 },{"./errors":94,"./urls":96}],98:[function(require,module,exports){
