@@ -225,7 +225,7 @@ describe("AdminAdvertiser", () => {
             }
         });
 
-        it("should edit advertiser info  by admin", async (done) => {
+        it("should edit advertiser info by admin", async (done) => {
             try {
                 let list = await advertiserList();
                 let advertiser = list[0];
@@ -236,6 +236,7 @@ describe("AdminAdvertiser", () => {
                     Email: data.advertiser.Email,
                     PersonCompanyID: advertiser.PersonCompanyID
                 });
+
                 // expect(advertiser).to.be.ok();
                 // expect(advertiser).to.have.property("Name", "edited");
                 done();
@@ -311,7 +312,6 @@ describe("AdminAdvertiser", () => {
                 let data = await suspendAdvertiser();
                 done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
             } catch (e) {
-                console.log(e);
                 expect(e).to.be.a(BadRequest);
                 expect(e.body).to.have.property("Error");
                 expect(e.body.Error).to.have.property("Message");
@@ -323,8 +323,13 @@ describe("AdminAdvertiser", () => {
             try {
                 let advertisers = await getAdvertisers();
                 let advertiser = advertisers[0]
-                let result = await suspendAdvertiser(advertiser.PersonCompanyID);
+                let data = await suspendAdvertiser(advertiser.PersonCompanyID);
+
+                expect(data).to.have.property("PersonCompanyID");
+                expect(data).to.have.property("IsActive", false);
+                expect(data).to.have.property("IsBlocked", false);
                 done();
+
             } catch (e) {
                 done(e);
             }
@@ -360,24 +365,16 @@ describe("AdminAdvertiser", () => {
             }
         });
 
-        it("should return 200:OK with advertiser info e.g. {Company:[], User:{}} after admin suspend advertiser", async (done) => {
+        it("should return 200:OK with advertiser info e.g. {PersonCompanyID, IsActive, IsBlocked} after admin suspend advertiser", async (done) => {
             try {
                 let advertisers = await getAdvertisers();
                 let data = await activateAdvertiser(advertisers[0].PersonCompanyID);
 
-                expect(data).to.have.property("Company");
-                expect(data).to.have.property("User");
-                expect(data.Company).to.be.an(Array);
-                expect(data.Company[0]).to.have.property("CompanyName");
-                expect(data.Company[0]).to.have.property("IsActive");
-                expect(data.Company[0]).to.have.property("IsBlocked");
-                expect(data.Company[0]).to.have.property("PersonCompanyID", 1);
-
-                expect(data.User).to.have.property("AuthToken");
-                expect(data.User.AuthToken).to.be.ok();
-                expect(data.User).to.have.property("IsAdmin", true);
-                expect(data.User).to.have.property("UserID", 1);
+                expect(data).to.have.property("PersonCompanyID");
+                expect(data).to.have.property("IsActive", true);
+                expect(data).to.have.property("IsBlocked", false);
                 done();
+
             } catch (e) {
                 done(e);
             }

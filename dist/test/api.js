@@ -4202,7 +4202,7 @@ describe("AdminAdvertiser", function () {
             }, null, _this, [[0, 11]]);
         });
 
-        it("should edit advertiser info  by admin", function callee$2$0(done) {
+        it("should edit advertiser info by admin", function callee$2$0(done) {
             var list, advertiser, editedAdvertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -4403,20 +4403,19 @@ describe("AdminAdvertiser", function () {
                         _data8 = context$3$0.sent;
 
                         done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
-                        context$3$0.next = 14;
+                        context$3$0.next = 13;
                         break;
 
                     case 7:
                         context$3$0.prev = 7;
                         context$3$0.t0 = context$3$0["catch"](0);
 
-                        console.log(context$3$0.t0);
                         expect(context$3$0.t0).to.be.a(_errors.BadRequest);
                         expect(context$3$0.t0.body).to.have.property("Error");
                         expect(context$3$0.t0.body.Error).to.have.property("Message");
                         done();
 
-                    case 14:
+                    case 13:
                     case "end":
                         return context$3$0.stop();
                 }
@@ -4424,7 +4423,8 @@ describe("AdminAdvertiser", function () {
         });
 
         it("should return 200:OK after admin suspend advertiser", function callee$2$0(done) {
-            var advertisers, advertiser, result;
+            var advertisers, advertiser, _data9;
+
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
@@ -4439,29 +4439,33 @@ describe("AdminAdvertiser", function () {
                         return regeneratorRuntime.awrap((0, _utils.suspendAdvertiser)(advertiser.PersonCompanyID));
 
                     case 7:
-                        result = context$3$0.sent;
+                        _data9 = context$3$0.sent;
 
+                        expect(_data9).to.have.property("PersonCompanyID");
+                        expect(_data9).to.have.property("IsActive", false);
+                        expect(_data9).to.have.property("IsBlocked", false);
                         done();
-                        context$3$0.next = 14;
+
+                        context$3$0.next = 17;
                         break;
 
-                    case 11:
-                        context$3$0.prev = 11;
+                    case 14:
+                        context$3$0.prev = 14;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 14:
+                    case 17:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 11]]);
+            }, null, _this, [[0, 14]]);
         });
     });
 
     describe("POST: /api/admin/activateadvertiser", function () {
         it("should return Unauthorized:401 for Unauthorized admin", function callee$2$0(done) {
-            var _data9;
+            var _data10;
 
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -4471,7 +4475,7 @@ describe("AdminAdvertiser", function () {
                         return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ACTIVATE_ADVERTISER")));
 
                     case 3:
-                        _data9 = context$3$0.sent;
+                        _data10 = context$3$0.sent;
 
                         done(new Error("Server should respond with Unauthorized:401 instead of OK:200"));
                         context$3$0.next = 13;
@@ -4494,7 +4498,7 @@ describe("AdminAdvertiser", function () {
         });
 
         it("should return BadRequest:400 for invalid advertiser data", function callee$2$0(done) {
-            var _data10;
+            var _data11;
 
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -4504,7 +4508,7 @@ describe("AdminAdvertiser", function () {
                         return regeneratorRuntime.awrap((0, _utils.activateAdvertiser)());
 
                     case 3:
-                        _data10 = context$3$0.sent;
+                        _data11 = context$3$0.sent;
 
                         done(new Error("Server should  respond with BadRequest:400 instead of OK:200"));
                         context$3$0.next = 12;
@@ -4530,8 +4534,8 @@ describe("AdminAdvertiser", function () {
             }, null, _this, [[0, 7]]);
         });
 
-        it("should return 200:OK with advertiser info e.g. {Company:[], User:{}} after admin suspend advertiser", function callee$2$0(done) {
-            var advertisers, _data11;
+        it("should return 200:OK with advertiser info e.g. {PersonCompanyID, IsActive, IsBlocked} after admin suspend advertiser", function callee$2$0(done) {
+            var advertisers, _data12;
 
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -4546,35 +4550,27 @@ describe("AdminAdvertiser", function () {
                         return regeneratorRuntime.awrap((0, _utils.activateAdvertiser)(advertisers[0].PersonCompanyID));
 
                     case 6:
-                        _data11 = context$3$0.sent;
+                        _data12 = context$3$0.sent;
 
-                        expect(_data11).to.have.property("Company");
-                        expect(_data11).to.have.property("User");
-                        expect(_data11.Company).to.be.an(Array);
-                        expect(_data11.Company[0]).to.have.property("CompanyName");
-                        expect(_data11.Company[0]).to.have.property("IsActive");
-                        expect(_data11.Company[0]).to.have.property("IsBlocked");
-                        expect(_data11.Company[0]).to.have.property("PersonCompanyID", 1);
-
-                        expect(_data11.User).to.have.property("AuthToken");
-                        expect(_data11.User.AuthToken).to.be.ok();
-                        expect(_data11.User).to.have.property("IsAdmin", true);
-                        expect(_data11.User).to.have.property("UserID", 1);
+                        expect(_data12).to.have.property("PersonCompanyID");
+                        expect(_data12).to.have.property("IsActive", true);
+                        expect(_data12).to.have.property("IsBlocked", false);
                         done();
-                        context$3$0.next = 24;
+
+                        context$3$0.next = 16;
                         break;
 
-                    case 21:
-                        context$3$0.prev = 21;
+                    case 13:
+                        context$3$0.prev = 13;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 24:
+                    case 16:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 21]]);
+            }, null, _this, [[0, 13]]);
         });
     });
 });
