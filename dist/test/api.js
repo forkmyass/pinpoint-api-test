@@ -4032,6 +4032,9 @@ describe("AdminList", function () {
 
 describe("AdminAdvertiser", function () {
     describe("POST: /api/admin/createadvertiser", function () {
+        var _this2 = this;
+
+        this.timeout(10000);
         it("should return Unauthorized:401 for Unauthorized admin", function callee$2$0(done) {
             var advertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
@@ -4061,7 +4064,7 @@ describe("AdminAdvertiser", function () {
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 7]]);
+            }, null, _this2, [[0, 7]]);
         });
 
         it("should return BadRequest:400 for invalid advertiser data", function callee$2$0() {
@@ -4092,17 +4095,17 @@ describe("AdminAdvertiser", function () {
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 7]]);
+            }, null, _this2, [[0, 7]]);
         });
 
-        it("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
+        it.only("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
             var advertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.createAdvertiser)(_utils.data.advertiser));
+                        return regeneratorRuntime.awrap((0, _utils.createAdvertiser)(Object.assign(_utils.data.advertiser, { Email: "test@email.com" + Date.now() })));
 
                     case 3:
                         advertiser = context$3$0.sent;
@@ -4112,20 +4115,21 @@ describe("AdminAdvertiser", function () {
                         expect(advertiser).to.have.property("Payment");
 
                         done();
-                        context$3$0.next = 13;
+                        context$3$0.next = 14;
                         break;
 
                     case 10:
                         context$3$0.prev = 10;
                         context$3$0.t0 = context$3$0["catch"](0);
 
+                        console.log(context$3$0.t0);
                         done(context$3$0.t0);
 
-                    case 13:
+                    case 14:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 10]]);
+            }, null, _this2, [[0, 10]]);
         });
     });
 
@@ -4711,13 +4715,15 @@ var createAdvertiser = function createAdvertiser(data) {
 
             case 2:
                 loginData = context$1$0.sent;
-                context$1$0.next = 5;
+
+                console.log(loginData);
+                context$1$0.next = 6;
                 return regeneratorRuntime.awrap(post((0, _urls.url)("CREATE_ADVERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
 
-            case 5:
+            case 6:
                 return context$1$0.abrupt("return", context$1$0.sent);
 
-            case 6:
+            case 7:
             case "end":
                 return context$1$0.stop();
         }

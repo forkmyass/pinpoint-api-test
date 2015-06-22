@@ -60,6 +60,7 @@ let login = async (EmailAddress, Password, justToken) => {
 
 let createAdvertiser = async (data) => {
     let loginData = await login("admin", "password");
+    console.log(loginData);
     return await post(url("CREATE_ADVERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
 };
 

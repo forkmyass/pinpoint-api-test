@@ -155,7 +155,8 @@ describe("AdminList", () => {
 });
 
 describe("AdminAdvertiser", () => {
-    describe("POST: /api/admin/createadvertiser", () => {
+    describe("POST: /api/admin/createadvertiser", function () {
+        this.timeout(10000);
         it("should return Unauthorized:401 for Unauthorized admin", async (done) => {
             try {
                 let advertiser = await post(url("CREATE_ADVERTISER"));
@@ -179,9 +180,9 @@ describe("AdminAdvertiser", () => {
             }
         });
 
-        it("should return advertiser info after creation advertiser by admin", async (done) => {
+        it.only("should return advertiser info after creation advertiser by admin", async (done) => {
             try {
-                let advertiser = await createAdvertiser(data.advertiser);
+                let advertiser = await createAdvertiser(Object.assign(data.advertiser, {Email: "test@email.com" + Date.now()}));
 
                 expect(advertiser).to.be.ok();
                 expect(advertiser).to.have.property("Package");
@@ -189,6 +190,7 @@ describe("AdminAdvertiser", () => {
 
                 done();
             } catch (e) {
+                console.log(e);
                 done(e);
             }
         });
