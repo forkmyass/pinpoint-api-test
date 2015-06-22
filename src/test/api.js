@@ -36,16 +36,14 @@ describe("Login", () => {
 
                 expect(data).to.have.property("Company");
                 expect(data).to.have.property("User");
-                expect(data.Company).to.be.an(Array);
-                expect(data.Company[0]).to.have.property("CompanyName");
-                expect(data.Company[0]).to.have.property("IsActive");
-                expect(data.Company[0]).to.have.property("IsBlocked");
-                expect(data.Company[0]).to.have.property("PersonCompanyID", 5);
+                expect(data.Company).to.have.property("Name");
+                expect(data.Company).to.have.property("IsActive");
+                expect(data.Company).to.have.property("IsBlocked");
+                expect(data.Company).to.have.property("PersonCompanyID", 5);
 
                 expect(data.User).to.have.property("AuthToken");
                 expect(data.User.AuthToken).to.be.ok();
                 expect(data.User).to.have.property("IsAdmin", false);
-                expect(data.User).to.have.property("UserID", 5);
                 done();
             } catch (e) {
                 done(e);
@@ -58,16 +56,14 @@ describe("Login", () => {
 
                 expect(data).to.have.property("Company");
                 expect(data).to.have.property("User");
-                expect(data.Company).to.be.an(Array);
-                expect(data.Company[0]).to.have.property("CompanyName");
-                expect(data.Company[0]).to.have.property("IsActive");
-                expect(data.Company[0]).to.have.property("IsBlocked");
-                expect(data.Company[0]).to.have.property("PersonCompanyID", 1);
+                expect(data.Company).to.have.property("Name");
+                expect(data.Company).to.have.property("IsActive");
+                expect(data.Company).to.have.property("IsBlocked");
+                expect(data.Company).to.have.property("PersonCompanyID", 1);
 
                 expect(data.User).to.have.property("AuthToken");
                 expect(data.User.AuthToken).to.be.ok();
                 expect(data.User).to.have.property("IsAdmin", true);
-                expect(data.User).to.have.property("UserID", 1);
                 done();
             } catch (e) {
                 done(e);
@@ -93,7 +89,7 @@ describe("AdminList", () => {
         it("should return OK:200 with advertisers list", async (done) => {
             try {
                 let token = await login("admin", "password", true);
-                let advertisers = await post(url("ADVERTISER_LIST"), {}, {"Authorization-Token": token});
+                let advertisers = await post(url("ADVERTISER_LIST"), {limit: 4}, {"Authorization-Token": token});
                 expect(advertisers).to.be.ok();
                 done();
             } catch (e) {
@@ -147,7 +143,6 @@ describe("AdminList", () => {
                 let data = await post(url("REPORT_LIST"), {}, {"Authorization-Token": token});
                 expect(data).to.be.ok();
                 expect(data.Report).to.be.an(Array);
-                expect(data.Report[0]).to.have.property("CSV");
                 expect(data.Report[0]).to.have.property("Date");
                 expect(data.Report[0]).to.have.property("Description");
                 expect(data.Report[0]).to.have.property("Name");
@@ -284,7 +279,6 @@ describe("AdminAdvertiser", () => {
                 expect(data.User).to.have.property("AuthToken");
                 expect(data.User.AuthToken).to.be.ok();
                 expect(data.User).to.have.property("IsAdmin", false);
-                expect(data.User).to.have.property("UserID", 5);
                 done();
                 done();
             } catch (e) {
@@ -325,7 +319,6 @@ describe("AdminAdvertiser", () => {
                 let advertiser = advertisers[0]
                 let data = await suspendAdvertiser(advertiser.PersonCompanyID);
 
-                expect(data).to.have.property("PersonCompanyID");
                 expect(data).to.have.property("IsActive", false);
                 expect(data).to.have.property("IsBlocked", false);
                 done();
@@ -370,7 +363,6 @@ describe("AdminAdvertiser", () => {
                 let advertisers = await getAdvertisers();
                 let data = await activateAdvertiser(advertisers[0].PersonCompanyID);
 
-                expect(data).to.have.property("PersonCompanyID");
                 expect(data).to.have.property("IsActive", true);
                 expect(data).to.have.property("IsBlocked", false);
                 done();

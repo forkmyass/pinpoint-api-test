@@ -3748,31 +3748,29 @@ describe("Login", function () {
 
                         expect(_data).to.have.property("Company");
                         expect(_data).to.have.property("User");
-                        expect(_data.Company).to.be.an(Array);
-                        expect(_data.Company[0]).to.have.property("CompanyName");
-                        expect(_data.Company[0]).to.have.property("IsActive");
-                        expect(_data.Company[0]).to.have.property("IsBlocked");
-                        expect(_data.Company[0]).to.have.property("PersonCompanyID", 5);
+                        expect(_data.Company).to.have.property("Name");
+                        expect(_data.Company).to.have.property("IsActive");
+                        expect(_data.Company).to.have.property("IsBlocked");
+                        expect(_data.Company).to.have.property("PersonCompanyID", 5);
 
                         expect(_data.User).to.have.property("AuthToken");
                         expect(_data.User.AuthToken).to.be.ok();
                         expect(_data.User).to.have.property("IsAdmin", false);
-                        expect(_data.User).to.have.property("UserID", 5);
                         done();
-                        context$3$0.next = 21;
+                        context$3$0.next = 19;
                         break;
 
-                    case 18:
-                        context$3$0.prev = 18;
+                    case 16:
+                        context$3$0.prev = 16;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 21:
+                    case 19:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 18]]);
+            }, null, _this, [[0, 16]]);
         });
 
         it("should return User and Company info after success admin login", function callee$2$0(done) {
@@ -3790,31 +3788,29 @@ describe("Login", function () {
 
                         expect(_data2).to.have.property("Company");
                         expect(_data2).to.have.property("User");
-                        expect(_data2.Company).to.be.an(Array);
-                        expect(_data2.Company[0]).to.have.property("CompanyName");
-                        expect(_data2.Company[0]).to.have.property("IsActive");
-                        expect(_data2.Company[0]).to.have.property("IsBlocked");
-                        expect(_data2.Company[0]).to.have.property("PersonCompanyID", 1);
+                        expect(_data2.Company).to.have.property("Name");
+                        expect(_data2.Company).to.have.property("IsActive");
+                        expect(_data2.Company).to.have.property("IsBlocked");
+                        expect(_data2.Company).to.have.property("PersonCompanyID", 1);
 
                         expect(_data2.User).to.have.property("AuthToken");
                         expect(_data2.User.AuthToken).to.be.ok();
                         expect(_data2.User).to.have.property("IsAdmin", true);
-                        expect(_data2.User).to.have.property("UserID", 1);
                         done();
-                        context$3$0.next = 21;
+                        context$3$0.next = 19;
                         break;
 
-                    case 18:
-                        context$3$0.prev = 18;
+                    case 16:
+                        context$3$0.prev = 16;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 21:
+                    case 19:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 18]]);
+            }, null, _this, [[0, 16]]);
         });
     });
 });
@@ -3865,7 +3861,7 @@ describe("AdminList", function () {
                     case 3:
                         token = context$3$0.sent;
                         context$3$0.next = 6;
-                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADVERTISER_LIST"), {}, { "Authorization-Token": token }));
+                        return regeneratorRuntime.awrap((0, _utils.post)((0, _urls.url)("ADVERTISER_LIST"), { limit: 4 }, { "Authorization-Token": token }));
 
                     case 6:
                         advertisers = context$3$0.sent;
@@ -4012,25 +4008,24 @@ describe("AdminList", function () {
 
                         expect(_data3).to.be.ok();
                         expect(_data3.Report).to.be.an(Array);
-                        expect(_data3.Report[0]).to.have.property("CSV");
                         expect(_data3.Report[0]).to.have.property("Date");
                         expect(_data3.Report[0]).to.have.property("Description");
                         expect(_data3.Report[0]).to.have.property("Name");
                         done();
-                        context$3$0.next = 19;
+                        context$3$0.next = 18;
                         break;
 
-                    case 16:
-                        context$3$0.prev = 16;
+                    case 15:
+                        context$3$0.prev = 15;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 19:
+                    case 18:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 16]]);
+            }, null, _this, [[0, 15]]);
         });
     });
 });
@@ -4335,23 +4330,22 @@ describe("AdminAdvertiser", function () {
                         expect(_data6.User).to.have.property("AuthToken");
                         expect(_data6.User.AuthToken).to.be.ok();
                         expect(_data6.User).to.have.property("IsAdmin", false);
-                        expect(_data6.User).to.have.property("UserID", 5);
                         done();
                         done();
-                        context$3$0.next = 21;
+                        context$3$0.next = 20;
                         break;
 
-                    case 18:
-                        context$3$0.prev = 18;
+                    case 17:
+                        context$3$0.prev = 17;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 21:
+                    case 20:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 18]]);
+            }, null, _this, [[0, 17]]);
         });
     });
 
@@ -4441,25 +4435,24 @@ describe("AdminAdvertiser", function () {
                     case 7:
                         _data9 = context$3$0.sent;
 
-                        expect(_data9).to.have.property("PersonCompanyID");
                         expect(_data9).to.have.property("IsActive", false);
                         expect(_data9).to.have.property("IsBlocked", false);
                         done();
 
-                        context$3$0.next = 17;
+                        context$3$0.next = 16;
                         break;
 
-                    case 14:
-                        context$3$0.prev = 14;
+                    case 13:
+                        context$3$0.prev = 13;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 17:
+                    case 16:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 14]]);
+            }, null, _this, [[0, 13]]);
         });
     });
 
@@ -4552,25 +4545,24 @@ describe("AdminAdvertiser", function () {
                     case 6:
                         _data12 = context$3$0.sent;
 
-                        expect(_data12).to.have.property("PersonCompanyID");
                         expect(_data12).to.have.property("IsActive", true);
                         expect(_data12).to.have.property("IsBlocked", false);
                         done();
 
-                        context$3$0.next = 16;
+                        context$3$0.next = 15;
                         break;
 
-                    case 13:
-                        context$3$0.prev = 13;
+                    case 12:
+                        context$3$0.prev = 12;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 16:
+                    case 15:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 13]]);
+            }, null, _this, [[0, 12]]);
         });
     });
 });
