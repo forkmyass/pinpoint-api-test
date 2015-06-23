@@ -180,7 +180,7 @@ describe("AdminAdvertiser", () => {
             }
         });
 
-        it.only("should return advertiser info after creation advertiser by admin", async (done) => {
+        it("should return advertiser info after creation advertiser by admin", async (done) => {
             try {
                 let advertiser = await createAdvertiser(Object.assign(data.advertiser, {Email: "test@email.com" + Date.now()}));
 

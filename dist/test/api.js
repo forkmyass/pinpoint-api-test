@@ -4622,7 +4622,7 @@ var data = {
         "Postcode": "NE11JF",
         "Sales": "test",
         "Billing": "test",
-        "Payment": "test",
+        "PaymentID": "test",
         "Package": "test"
     }
 };
@@ -4715,15 +4715,13 @@ var createAdvertiser = function createAdvertiser(data) {
 
             case 2:
                 loginData = context$1$0.sent;
-
-                console.log(loginData);
-                context$1$0.next = 6;
+                context$1$0.next = 5;
                 return regeneratorRuntime.awrap(post((0, _urls.url)("CREATE_ADVERTISER"), data, { "Authorization-Token": loginData.User.AuthToken }));
 
-            case 6:
+            case 5:
                 return context$1$0.abrupt("return", context$1$0.sent);
 
-            case 7:
+            case 6:
             case "end":
                 return context$1$0.stop();
         }
