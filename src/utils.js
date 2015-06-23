@@ -10,10 +10,7 @@ let data = {
         "Address": "holoseevskoe ave",
         "City": "Kiev",
         "Postcode": "NE11JF",
-        "Sales": "test",
-        "Billing": "test",
-        "PaymentID": "test",
-        "Package": "test"
+        "PaymentID": 2
     }
 }
 

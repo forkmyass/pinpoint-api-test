@@ -32,14 +32,15 @@ describe("Login", () => {
 
         it("should return User and Company info after success advertiser login", async (done) => {
             try {
-                let data = await login("multiplelogin", "password");
+                let data = await login("user1", "password");
 
+                console.log(data);
                 expect(data).to.have.property("Company");
                 expect(data).to.have.property("User");
                 expect(data.Company).to.have.property("Name");
                 expect(data.Company).to.have.property("IsActive");
                 expect(data.Company).to.have.property("IsBlocked");
-                expect(data.Company).to.have.property("PersonCompanyID", 5);
+                expect(data.Company).to.have.property("PersonCompanyID", 2);
 
                 expect(data.User).to.have.property("AuthToken");
                 expect(data.User.AuthToken).to.be.ok();
@@ -233,9 +234,6 @@ describe("AdminAdvertiser", () => {
                     Email: data.advertiser.Email,
                     PersonCompanyID: advertiser.PersonCompanyID
                 });
-
-                // expect(advertiser).to.be.ok();
-                // expect(advertiser).to.have.property("Name", "edited");
                 done();
             } catch (e) {
                 done(e);
@@ -270,13 +268,13 @@ describe("AdminAdvertiser", () => {
 
         it("should return OK:200 status with User and Company Info", async (done) => {
             try {
-                let data = await emulateAdvertiser(5);
+                let data = await emulateAdvertiser(2);
                 expect(data).to.have.property("Company");
                 expect(data).to.have.property("User");
                 expect(data.Company).to.have.property("CompanyName");
                 expect(data.Company).to.have.property("IsActive");
                 expect(data.Company).to.have.property("IsBlocked");
-                expect(data.Company).to.have.property("PersonCompanyID", 5);
+                expect(data.Company).to.have.property("PersonCompanyID", 2);
 
                 expect(data.User).to.have.property("AuthToken");
                 expect(data.User.AuthToken).to.be.ok();

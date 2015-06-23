@@ -3741,36 +3741,37 @@ describe("Login", function () {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.login)("multiplelogin", "password"));
+                        return regeneratorRuntime.awrap((0, _utils.login)("user1", "password"));
 
                     case 3:
                         _data = context$3$0.sent;
 
+                        console.log(_data);
                         expect(_data).to.have.property("Company");
                         expect(_data).to.have.property("User");
                         expect(_data.Company).to.have.property("Name");
                         expect(_data.Company).to.have.property("IsActive");
                         expect(_data.Company).to.have.property("IsBlocked");
-                        expect(_data.Company).to.have.property("PersonCompanyID", 5);
+                        expect(_data.Company).to.have.property("PersonCompanyID", 2);
 
                         expect(_data.User).to.have.property("AuthToken");
                         expect(_data.User.AuthToken).to.be.ok();
                         expect(_data.User).to.have.property("IsAdmin", false);
                         done();
-                        context$3$0.next = 19;
+                        context$3$0.next = 20;
                         break;
 
-                    case 16:
-                        context$3$0.prev = 16;
+                    case 17:
+                        context$3$0.prev = 17;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         done(context$3$0.t0);
 
-                    case 19:
+                    case 20:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this, [[0, 16]]);
+            }, null, _this, [[0, 17]]);
         });
 
         it("should return User and Company info after success admin login", function callee$2$0(done) {
@@ -4224,8 +4225,6 @@ describe("AdminAdvertiser", function () {
                     case 7:
                         editedAdvertiser = context$3$0.sent;
 
-                        // expect(advertiser).to.be.ok();
-                        // expect(advertiser).to.have.property("Name", "edited");
                         done();
                         context$3$0.next = 14;
                         break;
@@ -4319,7 +4318,7 @@ describe("AdminAdvertiser", function () {
                     case 0:
                         context$3$0.prev = 0;
                         context$3$0.next = 3;
-                        return regeneratorRuntime.awrap((0, _utils.emulateAdvertiser)(5));
+                        return regeneratorRuntime.awrap((0, _utils.emulateAdvertiser)(2));
 
                     case 3:
                         _data6 = context$3$0.sent;
@@ -4329,7 +4328,7 @@ describe("AdminAdvertiser", function () {
                         expect(_data6.Company).to.have.property("CompanyName");
                         expect(_data6.Company).to.have.property("IsActive");
                         expect(_data6.Company).to.have.property("IsBlocked");
-                        expect(_data6.Company).to.have.property("PersonCompanyID", 5);
+                        expect(_data6.Company).to.have.property("PersonCompanyID", 2);
 
                         expect(_data6.User).to.have.property("AuthToken");
                         expect(_data6.User.AuthToken).to.be.ok();
@@ -4620,10 +4619,7 @@ var data = {
         "Address": "holoseevskoe ave",
         "City": "Kiev",
         "Postcode": "NE11JF",
-        "Sales": "test",
-        "Billing": "test",
-        "PaymentID": "test",
-        "Package": "test"
+        "PaymentID": 2
     }
 };
 
