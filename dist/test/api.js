@@ -4099,7 +4099,7 @@ describe("AdminAdvertiser", function () {
             }, null, _this2, [[0, 7]]);
         });
 
-        it.only("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
+        it("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
             var advertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
