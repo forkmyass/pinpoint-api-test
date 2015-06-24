@@ -7,9 +7,12 @@ let data = {
         "Contact": "test",
         "Email": "wice242@gmail.com",
         "Password": "qQ190301",
-        "Address": "holoseevskoe ave",
-        "City": "Kiev",
+        "Address1": "holoseevskoe ave",
+        "Address2": "holoseevskoe ave",
+        "Address3": "holoseevskoe ave",
         "Postcode": "NE11JF",
+        "Reference": "test",
+        "InvoiceRef": "test",
         "PaymentID": 2
     }
 }
@@ -60,7 +63,7 @@ let createAdvertiser = async (data) => {
     return await post(url("CREATE_ADVERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
 };
 
-let editAdvertiser = async (id, data) => {
+let editAdvertiser = async (data) => {
     let loginData = await login("admin", "password");
     return await post(url("EDIT_ADVERTISER"), data, {"Authorization-Token": loginData.User.AuthToken});
 }

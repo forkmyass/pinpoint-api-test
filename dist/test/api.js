@@ -4099,7 +4099,7 @@ describe("AdminAdvertiser", function () {
             }, null, _this2, [[0, 7]]);
         });
 
-        it("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
+        it.only("should return advertiser info after creation advertiser by admin", function callee$2$0(done) {
             var advertiser;
             return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
                 while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -4112,25 +4112,28 @@ describe("AdminAdvertiser", function () {
                         advertiser = context$3$0.sent;
 
                         expect(advertiser).to.be.ok();
+                        expect(advertiser).to.have.property("PersonCompanyID");
+                        expect(advertiser).to.have.property("PaymentTypeID");
                         expect(advertiser).to.have.property("Package");
-                        expect(advertiser).to.have.property("Payment");
+                        expect(advertiser).to.have.property("Reference");
+                        expect(advertiser).to.have.property("Balance");
 
                         done();
-                        context$3$0.next = 14;
+                        context$3$0.next = 17;
                         break;
 
-                    case 10:
-                        context$3$0.prev = 10;
+                    case 13:
+                        context$3$0.prev = 13;
                         context$3$0.t0 = context$3$0["catch"](0);
 
                         console.log(context$3$0.t0);
                         done(context$3$0.t0);
 
-                    case 14:
+                    case 17:
                     case "end":
                         return context$3$0.stop();
                 }
-            }, null, _this2, [[0, 10]]);
+            }, null, _this2, [[0, 13]]);
         });
     });
 
@@ -4215,10 +4218,8 @@ describe("AdminAdvertiser", function () {
                         list = context$3$0.sent;
                         advertiser = list[0];
                         context$3$0.next = 7;
-                        return regeneratorRuntime.awrap((0, _utils.editAdvertiser)(advertiser.id, {
+                        return regeneratorRuntime.awrap((0, _utils.editAdvertiser)({
                             Name: "edited",
-                            Contact: "edited",
-                            Email: _utils.data.advertiser.Email,
                             PersonCompanyID: advertiser.PersonCompanyID
                         }));
 
@@ -4616,9 +4617,12 @@ var data = {
         "Contact": "test",
         "Email": "wice242@gmail.com",
         "Password": "qQ190301",
-        "Address": "holoseevskoe ave",
-        "City": "Kiev",
+        "Address1": "holoseevskoe ave",
+        "Address2": "holoseevskoe ave",
+        "Address3": "holoseevskoe ave",
         "Postcode": "NE11JF",
+        "Reference": "test",
+        "InvoiceRef": "test",
         "PaymentID": 2
     }
 };
@@ -4724,7 +4728,7 @@ var createAdvertiser = function createAdvertiser(data) {
     }, null, _this);
 };
 
-var editAdvertiser = function editAdvertiser(id, data) {
+var editAdvertiser = function editAdvertiser(data) {
     var loginData;
     return regeneratorRuntime.async(function editAdvertiser$(context$1$0) {
         while (1) switch (context$1$0.prev = context$1$0.next) {

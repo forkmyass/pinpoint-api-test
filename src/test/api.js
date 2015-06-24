@@ -181,13 +181,16 @@ describe("AdminAdvertiser", () => {
             }
         });
 
-        it("should return advertiser info after creation advertiser by admin", async (done) => {
+        it.only("should return advertiser info after creation advertiser by admin", async (done) => {
             try {
                 let advertiser = await createAdvertiser(Object.assign(data.advertiser, {Email: "test@email.com" + Date.now()}));
 
                 expect(advertiser).to.be.ok();
+                expect(advertiser).to.have.property("PersonCompanyID");
+                expect(advertiser).to.have.property("PaymentTypeID");
                 expect(advertiser).to.have.property("Package");
-                expect(advertiser).to.have.property("Payment");
+                expect(advertiser).to.have.property("Reference");
+                expect(advertiser).to.have.property("Balance");
 
                 done();
             } catch (e) {
@@ -228,10 +231,8 @@ describe("AdminAdvertiser", () => {
                 let list = await advertiserList();
                 let advertiser = list[0];
 
-                let editedAdvertiser = await editAdvertiser(advertiser.id, {
+                let editedAdvertiser = await editAdvertiser({
                     Name: "edited",
-                    Contact: "edited",
-                    Email: data.advertiser.Email,
                     PersonCompanyID: advertiser.PersonCompanyID
                 });
                 done();
