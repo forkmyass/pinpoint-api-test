@@ -70,7 +70,7 @@ let editAdvertiser = async (data) => {
 
 let advertiserList = async () => {
     let token = await login("admin", "password", true);
-    let data =  await post(url("ADVERTISER_LIST"), {}, {"Authorization-Token": token});
+    let data =  await post(url("ADVERTISER_LIST"), {IsActive: true}, {"Authorization-Token": token});
     return data.Advertiser
 }
 
